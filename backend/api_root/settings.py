@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'gymfrangos',
+    'backend.gymfrangos',
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-ROOT_URLCONF = 'api_root.urls'
+ROOT_URLCONF = 'backend.api_root.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'api_root.wsgi.application'
+WSGI_APPLICATION = 'backend.api_root.wsgi.application'
 
 
 # Database
