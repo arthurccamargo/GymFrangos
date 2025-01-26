@@ -80,10 +80,11 @@ TEMPLATES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# Configuração de arquivos estáticos para o Django reconher
+# Configurações para servir arquivos estáticos durante o desenvolvimento
+# Garante que o Django procure arquivos estáticos na pasta backend/static.
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),  # Caminho para a pasta static
 ]
 
 WSGI_APPLICATION = 'backend.api_root.wsgi.application'

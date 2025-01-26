@@ -21,9 +21,14 @@ const HomePage = () => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      position: 'absolute', // Add this
+      top: 0,              // Add this
+      left: 0,             // Add this
       color: 'white',
       boxSizing: 'border-box',
-      overflow: 'hidden'
+      overflowX: 'hidden',     // Block horizontal scroll only
+      overflowY: 'auto',       // Allow vertical scroll
+      fontFamily: 'Inter, system-ui, Avenir, Helvetica, Arial, sans-serif' // Add font-family
     }}>
       <header>
         <img 
@@ -38,7 +43,7 @@ const HomePage = () => {
         <h1 style={{
           fontSize: '3.5rem',
           fontWeight: 'bold',
-          margin: 3
+          margin: 0
         }}>Bem vindo ao GymFrangos!</h1>
       </header>
       <main>
