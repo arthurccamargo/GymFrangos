@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import logoImage from '../assets/frango.png' // Add image to assets folder
 

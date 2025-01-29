@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'rest_framework_social_oauth2',
 ]
 
+AUTH_USER_MODEL = 'gymfrangos.CustomUser'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
