@@ -7,17 +7,17 @@ no modelo de usuário (CustomUser), precisamos criar um gestor (manager) persona
 class CustomUserManager(BaseUserManager): # BaseUserManager class gerencia modelos de usuário no Django
     """Gerencia criação de usuários e superusuários"""
     
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("O email é obrigatório")
         email = self.normalize_email(email) # garante email seja salvo corretamente | Exemplo@GMAIL.com → exemplo@gmail.com
-        extra_fields.setdefault("is_active", True) 
+        extra_fields.setdefault("is_active", True) # Usuários inativos não podem fazer login, mas seus dados permanecem no banco de dados.
         user = self.model(email=email, **extra_fields) # cria novo usuário
         user.set_password(password) # Django criptografa a senha automaticamente
         user.save(using=self._db) # Suporte para múltiplos bancos de dados 
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -47,6 +47,6 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return 'Email | {self.email}'
+        return self.email
 
 
