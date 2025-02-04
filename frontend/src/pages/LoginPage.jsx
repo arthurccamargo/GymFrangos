@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const LoginPage = () => {
   const navigate = useNavigate(); //Hook do React Router para navegação entre páginas
@@ -15,24 +16,14 @@ const LoginPage = () => {
     e.preventDefault() //impede que recarregue a página, ent, + controle após envio do from
     try {
       // await pausa a execução da função até que a Promise seja resolvida e retorna o valor resolvido
-      const response = await fetch('http://localhost:8000/login/', { //onde estamos enviando a requisição
-        method: 'POST', //estamos fazendo uma requisição POST
-        headers: {
-          'Content-Type': 'application/json' //corpo da requisição será enviado no formato JSON
-        },
-        body: JSON.stringify({ //JSON.stringify converte o objeto JavaScript em uma string JSON
-          email: formData.email, //é o corpo da requisição, dados do formulário enviados
-          password: formData.password
-        })
-      })
+      // permite que você escreva código assíncrono de forma síncrona.
+      const response = await axios.post('http://localhost:8000/login/', { //onde estamos enviando a requisição
+        email: formData.email, //corpo da requisição, dados do formulário
+        password: formData.password
+      });
 
-      //Converte a resposta da requisição (que está no formato JSON) em um objeto JavaScript
-      const data = await response.json() //await é usado para esperar que a conversão seja concluída
-
-      if (!response.ok) {
-        setError(data.message || 'Login falhou. Tente novamente!')
-        return //para sair da função imediatamente após definir o erro
-      }
+      //axios já converte a resposta para JSON
+      const data = response.data; //response.data é onde os dados retornados pelo servidor estão armazenados
 
       //Armazena os tokens no localStorage ou state
       // localStorage é uma forma de armazenamento persistente no navegador, 
@@ -40,9 +31,9 @@ const LoginPage = () => {
       localStorage.setItem('access', data.access)
       localStorage.setItem('refresh', data.refresh)
 
-      navigate("/dashboard"); //redireciona para o Dashboard, após um login bem-sucedido
+      navigate("/dashboard");
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || 'Login falhou. Tente novamente!');
     }
   };
 
