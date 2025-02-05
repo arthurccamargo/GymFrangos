@@ -1,18 +1,6 @@
 const DashboardPage = () => {
   return (
-    <div
-      style={{
-        backgroundColor: '#DC143C', // Vermelho
-        minHeight: '100vh',         // Altura total da viewport
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'white',             // Texto branco
-        fontSize: '2rem',           // Tamanho da fonte
-        fontWeight: 'bold',         // Fonte em negrito
-        textAlign: 'center',        // Centralizar texto
-        padding: '1rem',            // Espaçamento interno
-      }}
+    <div className="bg-red-600 min-h-screen flex justify-center items-center text-9xl text-white font-bold text-center p-4"
     >
       <h1>Bem-vindo ao Dashboard!</h1>
     </div>
