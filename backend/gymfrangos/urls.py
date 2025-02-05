@@ -7,6 +7,6 @@ from .views.auth_views import RegisterView, LoginView
 função 'reverse' obtem a URL completa de uma rota usando seu 'name'
 """
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),  # Rota para registro
-    path('login/', LoginView.as_view(), name='login'),  # Rota para login
+    path('api/register/', RegisterView.as_view(), name='register'),  # Rota para registro
+    path('api/login/', LoginView.as_view(), name='login'),  # Rota para login
 ]

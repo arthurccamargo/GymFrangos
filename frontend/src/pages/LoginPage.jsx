@@ -17,7 +17,7 @@ const LoginPage = () => {
     try {
       // await pausa a execução da função até que a Promise seja resolvida e retorna o valor resolvido
       // permite que você escreva código assíncrono de forma síncrona.
-      const response = await axios.post('http://localhost:8000/login/', { //onde estamos enviando a requisição
+      const response = await axios.post('http://localhost:8000/api/login/', { //onde estamos enviando a requisição
         email: formData.email, //corpo da requisição, dados do formulário
         password: formData.password
       });
