@@ -3,7 +3,8 @@ import { IoMenu } from "react-icons/io5";
 
 function Navbar() { 
     return (
-      <div className="flex fixed w-full px-3 md:px-20 py-4 bg-red-500">
+      <header>
+      <div className="flex fixed w-full px-3 md:px-20 py-4 bg-red-600">
         <div className="container flex items-center mx-auto">
           
           <div className="w-full text-3xl font-bold text-white">GymFrangos</div>
@@ -25,6 +26,8 @@ function Navbar() {
           </div>
         </div>
       </div>
+      </header>
+      
     );
   };
   
