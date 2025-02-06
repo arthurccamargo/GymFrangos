@@ -16,7 +16,7 @@ const HomeMain = ({ menuOpen }) => {
         <p className="text-xl md:text-2xl font-display-baloo mb-2">
           Entre nessa comunidade para deixar de ser FRANGO
         </p>
-        <p className="text-xl md:text-2xl font-display-baloo mb-6">Todos frangos em um mesmo lugar</p>
+        <p className="text-xl md:text-2xl font-display-baloo mb-6">Todos frangos em um mesmo LUGAR</p>
 
         <div className="">
           <StartButton text="Começar Agora" route="/login" padding="px-6 py-3" textSize="text-lg" extraClasses="font-display-poetsen rounded-4xl" />
