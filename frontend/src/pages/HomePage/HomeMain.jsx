@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import logoImage from "../../assets/frango.png";
 
 const HomeMain = () => {
   const navigate = useNavigate();
 
   return (
     <main className="flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20">
-        <img src={logoImage} alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56"/>
+        <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56"/>
 
         <h1 className="text-5xl md:text-6xl font-bold mb-6">
           Frangos sempre juntos
