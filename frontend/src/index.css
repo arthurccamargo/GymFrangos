@@ -1,1 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400..800&family=Poetsen+One&family=Titan+One&display=swap');
 @import "tailwindcss";
+
+@theme {
+    --font-display-titan: "Titan One", serif;
+    --font-display-poetsen: "Poetsen One", serif;
+    --font-display-baloo: "Baloo Paaji 2", serif;
+  }
