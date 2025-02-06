@@ -16,7 +16,7 @@ function HomeNavbar() {
             <div className="text-3xl font-display-poetsen text-white">GymFrangos</div>
           </div>
 
-          <div className="items-end flex-1 text-white font-bold hidden md:flex">
+          <div className="items-end flex-1 text-white font-bold hidden lg:flex">
             <nav className="flex-1">
             <ul className="flex items-center justify-end text-lg font-display-baloo flex-1">
               <li className="p-4 hover:text-yellow-200">Características</li>
@@ -31,7 +31,7 @@ function HomeNavbar() {
             </ul>
             </nav>
           </div>
-          <div className="flex justify-end flex-1 md:hidden text-white text-4xl">
+          <div className="flex justify-end flex-1 lg:hidden text-white text-4xl">
             <IoMenu />
           </div>
         </div>
