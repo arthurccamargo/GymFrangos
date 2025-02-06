@@ -6,8 +6,8 @@ const HomeMain = () => {
   return (
     <main className="flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20">
         <div className="flex">
-          <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56"/>
-          <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56"/>
+          <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56 hidden sm:block"/>
+          <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56 hidden sm:block"/>
           <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56"/>
         </div>
         
