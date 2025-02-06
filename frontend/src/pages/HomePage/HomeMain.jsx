@@ -3,10 +3,10 @@ import StartButton from "../../components/StartButton";
 
 const HomeMain = ({ menuOpen }) => {
   return (
-    <main className={`flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20 ${menuOpen ? "mt-65" : ""}`}>
+    <main className={`flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20 lg:mt-0 ${menuOpen ? "mt-65" : ""}`}>
         <div className="flex">
-          <img src="/static/assets/frango.png" alt="Frango malhando" className="hidden md:w-50 lg:w-56 sm:block"/>
-          <img src="/static/assets/frango.png" alt="Frango malhando" className="hidden md:w-50 lg:w-56 sm:block"/>
+          <img src="/static/assets/frango.png" alt="Frango malhando" className="hidden md:w-50 lg:w-56 md:block"/>
+          <img src="/static/assets/frango.png" alt="Frango malhando" className="hidden md:w-50 lg:w-56 md:block"/>
           <img src="/static/assets/frango.png" alt="Frango malhando" className="w-40 md:w-50 lg:w-56"/>
         </div>
         
