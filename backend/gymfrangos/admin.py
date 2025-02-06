@@ -11,12 +11,12 @@ precisamos definir um UserAdmin também customizado
 """
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ("email", "is_staff", "is_active")  # Define quais colunas aparecem na lista de usuários no Admin
+    list_display = ("username", "email", "is_staff", "is_active")  # Define quais colunas aparecem na lista de usuários no Admin
     list_filter = ("is_staff", "is_active")  # Filtros laterais no Admin
 
     # Define quais campos aparecem ao editar um usuário existente no Django Admin
     fieldsets = ( 
-        (None, {"fields": ("email", "password")}),
+        (None, {"fields": ("username", "email", "password")}),
         ("Permissions", {"fields": ("is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Important Dates", {"fields": ("last_login", "date_joined")}),
     )
@@ -24,7 +24,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             "classes": ("wide",), # configuração visual para tornar o formulário mais largo
-            "fields": ("email", "password1", "password2", "is_staff", "is_active"),
+            "fields": ("username", "email", "password1", "password2", "is_staff", "is_active"),
         }),
     )
     search_fields = ("email",) # permite buscar usuários pelo email.

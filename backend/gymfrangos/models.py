@@ -30,12 +30,12 @@ class CustomUserManager(BaseUserManager): # BaseUserManager class gerencia model
 
 
 class CustomUser(AbstractUser):
-    # Deixa campo 'username' não obrigatório
-    username = models.CharField(max_length=150, null=True, blank=True, unique=True)
-    # Email como identificador único
+    # 'username' é obrigatório e único
+    username = models.CharField(max_length=150, unique=True)
+    # 'email' é obrigatório e único
     email = models.EmailField(unique=True)
 
-    # # Define que o login do usuário e do superusuário será feito pelo email
+    # Define que o login do usuário e do superusuário será feito pelo email
     USERNAME_FIELD = 'email'
 
     # Define quais campos são obrigatórios ao criar um superusuário, aplicado APENAS ao superusuário
