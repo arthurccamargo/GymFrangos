@@ -1,9 +1,7 @@
 import { IoMenu } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
-//import logoImage from '../assets/frango.png'
+import StartButton from "../../components/StartButton";
 
-function Navbar() { 
-  const navigate = useNavigate();
+function HomeNavbar() { 
     return (
       <header>
       <div className="flex fixed w-full px-3 md:px-20 py-4 bg-red-600">
@@ -28,11 +26,7 @@ function Navbar() {
                 <span className="border-r border-l-2 border-white"></span>
               </li>
               <li>
-                <button
-                  onClick={() => navigate("/login")}
-                  className="px-4 py-2 text-red-700 bg-white rounded-3xl shadow-md transition-transform transform hover:scale-105 hover:bg-gray-100">
-                  Iniciar
-                </button>
+                <StartButton text="Iniciar" route="/login" padding="px-4 py-2" />
               </li>
             </ul>
             </nav>
@@ -47,4 +41,4 @@ function Navbar() {
     );
   };
   
-  export default Navbar;
+  export default HomeNavbar;
