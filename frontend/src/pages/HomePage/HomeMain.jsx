@@ -1,10 +1,9 @@
+import PropTypes from 'prop-types';
 import StartButton from "../../components/StartButton";
 
-const HomeMain = () => {
-  
-
+const HomeMain = ({ menuOpen }) => {
   return (
-    <main className="flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20">
+    <main className={`flex flex-col items-center justify-center flex-grow text-center text-white bg-red-600 px-6 py-20 ${menuOpen ? "mt-65" : ""}`}>
         <div className="flex">
           <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56 hidden sm:block"/>
           <img src="/static/assets/frango.png" alt="Logo GymFrangos" className="w-32 md:w-40 lg:w-56 hidden sm:block"/>
@@ -24,6 +23,10 @@ const HomeMain = () => {
         </div>
       </main>
   );
+};
+
+HomeMain.propTypes = {
+  menuOpen: PropTypes.bool.isRequired
 };
 
 export default HomeMain;
