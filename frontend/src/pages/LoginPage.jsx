@@ -3,31 +3,24 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const LoginPage = () => {
-  const navigate = useNavigate(); //Hook do React Router para navegação entre páginas
-  const [formData, setFormData] = useState({ //Hook para gerenciar estado do form
+  const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
+  const [formData, setFormData] = useState({ // Hook para gerenciar estado do form
     email: '',
     password: ''
   })
 
-  const [error, setError] = useState('') //estado para mensagens de erro
+  const [error, setError] = useState('') // estado para mensagens de erro
 
   const handleSubmit = async (e) => {
-    //Quando um formulário é submetido, o comportamento padrão do navegador é recarregar a página
-    e.preventDefault() //impede que recarregue a página, ent, + controle após envio do from
+    e.preventDefault() // impede que recarregue a página
     try {
-      // await pausa a execução da função até que a Promise seja resolvida e retorna o valor resolvido
-      // permite que você escreva código assíncrono de forma síncrona.
-      const response = await axios.post('http://localhost:8000/api/login/', { //onde estamos enviando a requisição
-        email: formData.email, //corpo da requisição, dados do formulário
+      const response = await axios.post('http://localhost:8000/api/login/', {
+        email: formData.email,
         password: formData.password
       });
 
-      //axios já converte a resposta para JSON
-      const data = response.data; //response.data é onde os dados retornados pelo servidor estão armazenados
+      const data = response.data;
 
-      //Armazena os tokens no localStorage ou state
-      // localStorage é uma forma de armazenamento persistente no navegador, 
-      // o que significa que os dados permanecem lá mesmo após o navegador ser fechado
       localStorage.setItem('access', data.access)
       localStorage.setItem('refresh', data.refresh)
 
@@ -38,87 +31,99 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page" style={{
-      backgroundColor: '#DC143C',
-      margin: 0,
-      padding: 0,
-      minHeight: '100vh',
-      width: '100vw',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      overflow: 'hidden',
-      position: 'absolute',
-      top: 0,
-      left: 0
-    }}>
-      <div className="login-container" style={{
-        backgroundColor: 'rgba(0,0,0,0.2)',
-        padding: '2rem',
-        borderRadius: '10px',
-        width: '100%',
-        maxWidth: '400px'
-      }}>
-        <h1 style={{ marginBottom: '2rem' }}>Olá!</h1>
-        
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+    <div className='min-h-screen flex flex-col bg-login'>
+      <header className='top-0 left-0 w-full'>
+        <div className='flex justify-center items-center h-30 md:h-35'>
+          <img 
+                  src="/static/assets/favicon.webp" 
+                  alt="GymFrangos Logo" 
+                  className="w-15 h-15 rounded-full md:w-20 md:h-20"/>
+          </div>
+      </header>
 
-        <form onSubmit={handleSubmit} style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem'
-        }}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email} //controle de componente
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            style={{
-              padding: '0.8rem',
-              borderRadius: '5px',
-              border: 'none'
-            }}
-          />
-          
-          <input
-            type="password"
-            placeholder="Senha"
-            value={formData.password} //controle de componente
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            style={{
-              padding: '0.8rem',
-              borderRadius: '5px',
-              border: 'none'
-            }}
-          />
-          
-          <button type="submit" style={{
-            padding: '0.8rem',
-            backgroundColor: 'white',
-            color: '#DC143C',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold'
-          }}>
-            Entrar
-          </button>
-          <button type="button" style={{
-            padding: '0.8rem',
-            backgroundColor: 'white',
-            color: '#DC143C',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontWeight: 'bold' //redireciona o usuário para a página /register
-          }} onClick={() => window.location.href = '/register'}> 
-            Criar conta
-          </button>
-        </form>
-        
+      <div>
+        <main className='flex flex-grow flex-col items-center justify-center'>
+          <h1 className="mb-8 text-white text-4xl font-bold font-display-baloo md:text-5xl text-center">Nenhum frango<br/>fica para trás</h1>
+          {error && <p className="text-red-500 text-center">{error}</p>}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-gray-400 w-60 md:w-75 max-w-md">
+            {/* Campo de Email */}
+            <div className="relative w-full">
+              <input
+                type="email"
+                placeholder="Username or Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
+              />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  fill="none" viewBox="0 0 24 24" 
+                  strokeWidth={1.5} 
+                  stroke="currentColor" 
+                  className="size-6"
+                  >
+                  <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Campo de Senha */}
+            <div className="relative">
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="py-3 pl-10 rounded border-1 border-gray-500 w-full" // Ajuste o padding-left (pl-10)
+              />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 text-gray-400"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Botões */}
+            <button
+              type="submit"
+              className="bg-red-600 text-black p-2 rounded-3xl font-bold cursor-pointer mt-5 hover:bg-red-400"
+            >
+              Entrar
+            </button>
+            <button
+              type="button"
+              className="bg-red-600 text-black p-2 rounded-3xl font-bold cursor-pointer hover:bg-red-400"
+              onClick={() => navigate('/register')}
+            >
+              Criar conta
+            </button>
+          </form>
+        </main>
       </div>
-    </div>
+
+      <footer className="bg-login text-white text-center pt-12 md:pt-18 md:pb-5">
+        < div className="flex justify-center">
+          <hr className="border-t-2 border-gray-500 opacity-25 w-1/2 pb-5 md:pb-10"/>
+        </div>
+        <p>&copy; 2023 GymFrangos. Todos os direitos reservados.</p>
+      </footer>
+    </div> 
   )
 }
 
