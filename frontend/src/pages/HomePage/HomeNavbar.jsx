@@ -10,7 +10,7 @@ function HomeNavbar({ menuOpen, setMenuOpen }) {
           
           <div className="flex items-center">
               <img 
-                src="/static/assets/favicon.webp" 
+                src="/static/assets/favicon.png" 
                 alt="GymFrangos Logo" 
                 className="w-10 h-10 mr-2 rounded-full"
               />

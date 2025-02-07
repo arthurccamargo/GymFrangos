@@ -101,6 +101,7 @@ const LoginPage = () => {
             />
             <AuthButton
               type="button"
+              route='/register'
               text='Criar Conta'
             />
           </form>
