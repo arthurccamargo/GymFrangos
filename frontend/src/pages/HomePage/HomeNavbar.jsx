@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { IoMenu } from "react-icons/io5";
-import StartButton from "../../components/StartButton";
+import HomeButton from './HomeButton';
 
 function HomeNavbar({ menuOpen, setMenuOpen }) { 
   return (
@@ -27,7 +27,9 @@ function HomeNavbar({ menuOpen, setMenuOpen }) {
                   <span className="border-r border-l-2 border-white"></span>
                 </li>
                 <li>
-                  <StartButton text="Iniciar" route="/login" padding="px-4 py-2" />
+                  <HomeButton 
+                  text="Iniciar" 
+                  route="/login"/>
                 </li>
               </ul>
             </nav>
@@ -48,7 +50,9 @@ function HomeNavbar({ menuOpen, setMenuOpen }) {
             <li className="p-4 hover:text-yellow-200">Pacotes</li>
             <li className="p-4 hover:text-yellow-200">Contato</li>
             <li className="p-4">
-              <StartButton text="Iniciar" route="/login" padding="px-4 py-2" />
+              <HomeButton 
+              text="Iniciar" 
+              route="/login"/>
             </li>
           </ul>
         </div>
