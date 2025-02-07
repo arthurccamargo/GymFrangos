@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import AuthButton from '../components/AuthButton';
+import AuthHeader from '../components/AuthHeader';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
@@ -33,15 +34,7 @@ const LoginPage = () => {
 
   return (
     <div className='min-h-screen flex flex-col bg-login'>
-      <header className='top-0 left-0 w-full'>
-        <div className='flex justify-center items-center h-30 md:h-35'>
-          <img 
-                  src="/static/assets/favicon.webp" 
-                  alt="GymFrangos Logo" 
-                  className="w-15 h-15 rounded-full md:w-20 md:h-20"/>
-          </div>
-      </header>
-
+      <AuthHeader/>
       <div>
         <main className='flex flex-grow flex-col items-center justify-center'>
           <h1 className="mb-8 text-white text-4xl font-bold font-display-baloo md:text-5xl text-center">Nenhum frango<br/>fica para trás</h1>
