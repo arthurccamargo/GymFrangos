@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import StartButton from "../../components/StartButton";
+import HomeButton from './HomeButton';
 
 const HomeMain = ({ menuOpen }) => {
   return (
@@ -19,7 +19,11 @@ const HomeMain = ({ menuOpen }) => {
         <p className="text-xl md:text-2xl font-display-baloo mb-6">Todos frangos em um mesmo LUGAR</p>
 
         <div className="">
-          <StartButton text="Começar Agora" route="/login" padding="px-6 py-3" textSize="text-lg" extraClasses="font-display-poetsen rounded-4xl" />
+          <HomeButton
+          text="Começar Agora" 
+          route="/login" 
+          paddding="px-6 py-3"
+          extraClasses="rounded-4xl text-lg"/>
         </div>
       </main>
   );

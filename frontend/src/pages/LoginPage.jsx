@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import AuthButton from '../components/AuthButton';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
@@ -79,7 +80,7 @@ const LoginPage = () => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="py-3 pl-10 rounded border-1 border-gray-500 w-full" // Ajuste o padding-left (pl-10)
+                className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
@@ -100,19 +101,15 @@ const LoginPage = () => {
             </div>
 
             {/* Botões */}
-            <button
+            <AuthButton 
               type="submit"
-              className="bg-red-600 text-black p-2 rounded-3xl font-bold cursor-pointer mt-5 hover:bg-red-400"
-            >
-              Entrar
-            </button>
-            <button
+              text='Entrar'
+              extraClasses="mt-5"
+            />
+            <AuthButton
               type="button"
-              className="bg-red-600 text-black p-2 rounded-3xl font-bold cursor-pointer hover:bg-red-400"
-              onClick={() => navigate('/register')}
-            >
-              Criar conta
-            </button>
+              text='Criar Conta'
+            />
           </form>
         </main>
       </div>
