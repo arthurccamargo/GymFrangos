@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny #permite que usuários autenticado ou não acesse essa view
-from ..serializers import UserSerializer
+from .serializers import UserSerializer
 
 User = get_user_model()
 
@@ -49,7 +49,6 @@ class RegisterView(generics.CreateAPIView):
             "access": str(refresh.access_token),
             "refresh": str(refresh),
         }, status=status.HTTP_201_CREATED)
-
 
 class LoginView(TokenObtainPairView): # faz a autenticação do usuário e retorna os tokens JWT
     """ View para login de usuário """
