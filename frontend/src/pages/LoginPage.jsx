@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import AuthButton from '../components/AuthButton';
-import AuthHeader from '../components/AuthHeader';
-import AuthFooter from '../components/AuthFooter';
+import AuthButton from '../components/auth/AuthButton';
+import AuthHeader from '../components/auth/AuthHeader';
+import AuthFooter from '../components/auth/AuthFooter';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
