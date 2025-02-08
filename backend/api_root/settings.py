@@ -42,14 +42,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'backend.gymfrangos',
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
     'rest_framework_simplejwt',
+
+    # Apps do projeto
+    'backend.gymfrangos',
+    "backend.authentication",  # App de autenticação
 ]
 
-AUTH_USER_MODEL = 'gymfrangos.CustomUser'
+# garantir que o Django use o modelo de usuário personalizado
+AUTH_USER_MODEL = "authentication.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
