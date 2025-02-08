@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Navbar from "./HomeNavbar";
-import HomeFooter from "./HomeFooter";
-import HomeMain from "./HomeMain";
+import Navbar from "../components/home/HomeNavbar";
+import HomeFooter from "../components/home/HomeFooter";
+import HomeMain from "../components/home/HomeMain";
 
 const HomePage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
