@@ -45,7 +45,7 @@ const LoginPage = () => {
             {/* Campo de Email */}
             <div className="relative w-full">
               <input
-                type="email"
+                type="text"
                 placeholder="Username or Email"
                 value={formData.username_or_email}
                 onChange={(e) => setFormData({ ...formData, username_or_email: e.target.value })}
