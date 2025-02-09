@@ -48,9 +48,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     # Apps do projeto
-    'backend.gymfrangos',
-    "backend.authentication",  # App de autenticação
-    "backend.exercises",  # App de exercícios
+    'gymfrangos',
+    "authentication",  # App de autenticação
+    "exercises",  # App de exercícios
 
 ]
 
