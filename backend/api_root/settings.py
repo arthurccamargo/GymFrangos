@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     # Apps do projeto
     'backend.gymfrangos',
     "backend.authentication",  # App de autenticação
+    "backend.exercises",  # App de exercícios
+
 ]
 
 # garantir que o Django use o modelo de usuário personalizado
