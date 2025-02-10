@@ -46,7 +46,7 @@ const LoginPage = () => {
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Username or Email"
+                placeholder="Nome de usuário ou email"
                 value={formData.username_or_email}
                 onChange={(e) => setFormData({ ...formData, username_or_email: e.target.value })}
                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
@@ -71,7 +71,7 @@ const LoginPage = () => {
             <div className="relative">
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Senha"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"

@@ -5,7 +5,7 @@ const AuthFooter = () => {
             < div className="flex justify-center">
                 <hr className="border-t-2 border-gray-500 opacity-25 w-1/2 pb-5 md:pb-10"/>
             </div>
-            <p>&copy; 2023 GymFrangos. Todos os direitos reservados.</p>
+            <p>&copy; 2025 GymFrangos. Todos os direitos reservados.</p>
       </footer>
     )
 }
