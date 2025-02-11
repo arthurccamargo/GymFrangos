@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Navbar from "../components/home/HomeNavbar";
+import HomeHeader from "../components/home/HomeHeader";
 import HomeFooter from "../components/home/HomeFooter";
 import HomeMain from "../components/home/HomeMain";
 
@@ -8,7 +8,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
+      <HomeHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
       <HomeMain menuOpen={menuOpen}/>
       <HomeFooter/>
     </div>
