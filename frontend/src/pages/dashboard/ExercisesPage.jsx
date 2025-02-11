@@ -158,16 +158,16 @@ const ExercisePage = () => {
           
           {clickedExercise && ( //Se clickedExercise existir, os detalhes são renderizados.
             <div className="mt-4 space-y-6">
-              {/* Exercise Image */}
+              {/* Gift do Exercício */}
               <div className="rounded-lg overflow-hidden">
                 <img
                   src={clickedExercise.gif_url}
                   alt={clickedExercise.name}
-                  className="w-full h-64 object-cover"
+                  className="w-full max-h-[300px] object-contain"
                 />
               </div>
 
-              {/* Exercise Details */}
+              {/* Detalhes do Exercício */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-gray-700 mb-1">Parte do Corpo</h3>
