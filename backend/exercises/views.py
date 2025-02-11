@@ -5,7 +5,7 @@ from .models import Exercise
 from .serializers import ExerciseSerializer
 
 class ExerciseListView(generics.ListAPIView): # Permite consultas GET para obter múltiplos registros
-    queryset = Exercise.objects.all() # Retorna todos os exercícios cadastrados
+    queryset = Exercise.objects.all().order_by('id') # Retorna todos os exercícios cadastrados
     
     # Converte os objetos Exercise para JSON antes de enviá-los para o frontend
     serializer_class = ExerciseSerializer 
