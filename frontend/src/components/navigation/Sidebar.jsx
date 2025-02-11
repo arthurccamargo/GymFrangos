@@ -4,7 +4,7 @@ import { menuItems } from './navData';
 const Sidebar = () => {
 
   return (
-    <div className="hidden lg:block bg-gray-800 text-white w-80 h-screen flex-shrink-0 overflow-y-auto">
+    <div className="hidden h-screen lg:block bg-gray-800 text-white w-80  flex-shrink-0 overflow-y-auto sticky top-0">
       <div className="p-10">
         <h2 className="text-2xl font-bold">GymFrangos</h2>
       </div>
