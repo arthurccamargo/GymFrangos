@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
+import { menuItems } from './navData';
 
 const Sidebar = () => {
-  const menuItems = [
-    { name: "Página Inicial", path: "/dashboard" },
-    { name: "Treinos", path: "/dashboard/workouts" },
-  ];
 
   return (
-    <div className="bg-gray-800 text-white w-80 h-screen flex-shrink-0 overflow-y-auto">
+    <div className="hidden lg:block bg-gray-800 text-white w-80 h-screen flex-shrink-0 overflow-y-auto">
       <div className="p-10">
         <h2 className="text-2xl font-bold">GymFrangos</h2>
       </div>
@@ -18,8 +15,9 @@ const Sidebar = () => {
             {/* <Link> para navegação rápida sem recarregar a página */}
               <Link
                 to={item.path}
-                className="block p-2 hover:bg-gray-700 rounded transition duration-200"
+                className="flex items-center gap-3 p-2 hover:bg-gray-700 rounded transition duration-200" 
               >
+                {item.icon}
                 {item.name}
               </Link>
             </li>
