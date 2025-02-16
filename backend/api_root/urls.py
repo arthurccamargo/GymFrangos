@@ -4,8 +4,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls), # Rota para o painel de administração do Django
-    #path('auth/', include('rest_framework_social_oauth2.urls')),  # Rota para autenticação social
     path('auth/', include('authentication.urls')),  # Inclui as URLs de authentication
+    path('accounts/', include('allauth.urls')),
     path('api/exercises/', include('exercises.urls')),  # Inclui as URLs de exercises
 
     # Se a URL não for de uma API, serve o index.html do React

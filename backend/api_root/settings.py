@@ -42,7 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+
     'rest_framework_simplejwt',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
     'django_filters',
 
     # Apps do projeto
@@ -56,6 +62,8 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "authentication.CustomUser"
 
 MIDDLEWARE = [
+    "allauth.account.middleware.AccountMiddleware", # Add the account middleware
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,7 +72,29 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
 ]
+
+# Configurações específicas para Google
+CLIENT_ID = config('GOOGLE_CLIENT_ID')
+CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
+
+LOGIN_REDIRECT_URL = '/dashboard'
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': CLIENT_ID,
+            'secret': CLIENT_SECRET,
+            'key': ''
+        }
+    }
+}
 
 ROOT_URLCONF = 'backend.api_root.urls'
 
@@ -161,8 +191,7 @@ SIMPLE_JWT = {
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# Configurações específicas para Google
-CLIENT_ID = config('GOOGLE_CLIENT_ID')
-CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
