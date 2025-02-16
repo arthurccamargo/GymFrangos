@@ -4,6 +4,7 @@ import axios from 'axios';
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
+import GoogleButton from '@/components/auth/GoogleButton';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
@@ -105,6 +106,7 @@ const LoginPage = () => {
               route='/register'
               text='Criar Conta'
             />
+            <GoogleButton></GoogleButton>
           </form>
         </main>
       </div>

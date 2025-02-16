@@ -1,5 +1,18 @@
-# Virtual Environment
+# Ignorar ambiente virtual do Python na raiz
 venv/
 
-# Environmental variables
-.env
+# Ignorar arquivos de ambiente do Django e React
+backend/.env
+frontend/.env
+
+# Ignorar dependências do backend
+backend/__pycache__/
+backend/static/
+
+# Ignorar dependências do frontend
+frontend/node_modules/
+frontend/dist/
+
+# Ignorar arquivos do sistema
+*.log
+.DS_Store
