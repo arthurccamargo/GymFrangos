@@ -1,5 +1,5 @@
-from django.urls import path
-from .views import RegisterView, LoginView
+from django.urls import path, include
+from dj_rest_auth.registration.views import VerifyEmailView
 
 """
 'as_view()' converte a classe LoginView em uma função que o Django pode usar para processar requisições
@@ -7,6 +7,7 @@ from .views import RegisterView, LoginView
 função 'reverse' obtem a URL completa de uma rota usando seu 'name'
 """
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),  # Rota para registro
-    path('login/', LoginView.as_view(), name='login'),  # Rota para login
+    path('', include('dj_rest_auth.urls')),  # Endpoints de autenticação (login, logout, etc.)
+    path('registration/', include('dj_rest_auth.registration.urls')),
+    path('registration/verify-email/', VerifyEmailView.as_view(), name='account_confirm_email'),
 ]

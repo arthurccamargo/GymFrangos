@@ -16,3 +16,8 @@ frontend/dist/
 # Ignorar arquivos do sistema
 *.log
 .DS_Store
+
+# db
+db.sqlite3
+
+

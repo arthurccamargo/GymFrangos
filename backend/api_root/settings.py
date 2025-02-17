@@ -43,23 +43,47 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
+      # Apps do projeto
+    'gymfrangos',
+    "authentication",  # App de autenticação
+    "exercises",  # App de exercícios
+
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',  # Para registro (signup)
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 
     'django_filters',
-
-    # Apps do projeto
-    'gymfrangos',
-    "authentication",  # App de autenticação
-    "exercises",  # App de exercícios
-
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Exibe o e-mail no console
 
 # garantir que o Django use o modelo de usuário personalizado
 AUTH_USER_MODEL = "authentication.CustomUser"
+
+# Configurações do allauth (para registro)
+ACCOUNT_EMAIL_REQUIRED = True  # O email é obrigatório
+ACCOUNT_UNIQUE_EMAIL = True  # django-allauth impede múltiplos emails VERIFICADOS
+ACCOUNT_USERNAME_REQUIRED = True  # O username é obrigatório
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+# Configurações do dj-rest-auth
+REST_AUTH = {
+    'USE_JWT': True,  # Usar JWT para autenticação
+    'JWT_AUTH_COOKIE': 'jwt-auth',  # Nome do cookie para armazenar o token JWT
+    'JWT_AUTH_REFRESH_COOKIE': 'jwt-refresh',  # Nome do cookie para armazenar o token de refresh
+}
 
 MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware", # Add the account middleware
@@ -181,12 +205,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', # Paginação
         'PAGE_SIZE': 20,  # Define quantos exercícios serão retornados por requisição
-}
-
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 AUTHENTICATION_BACKENDS = (
