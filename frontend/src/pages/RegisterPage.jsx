@@ -24,10 +24,11 @@ const RegisterPage = () => {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:8000/auth/register/', {
+            const response = await axios.post('http://localhost:8000/auth/registration/', {
                 email: formData.email,
                 username: formData.username,
-                password: formData.password
+                password1: formData.password,
+                password2: formData.confirmPassword
             });
 
             setSuccess('Conta criada com sucesso!');
@@ -38,10 +39,26 @@ const RegisterPage = () => {
                 navigate("/login");
             }, 500);
         } catch (error) {
-            setError(error.response?.data?.message || 'Cadastro falhou. Tente novamente.');
+            if (error.response && error.response.data) {
+                const data = error.response.data;
+                let errorMessage = '';
+    
+                if (data.username) {
+                    errorMessage += `Username: ${data.username[0]} \n`;
+                }
+                if (data.email) {
+                    errorMessage += `Email: ${data.email[0]} \n`;
+                }
+                if (data.password1) {
+                    errorMessage += `Senha: ${data.password1[0]} \n`;
+                }
+    
+                setError(errorMessage || 'Erro desconhecido ao tentar registrar.');
+            } else {
+                setError('Falha na comunicação com o servidor.');
+            }
         }
     };
-
     return (
         <div className='min-h-screen flex flex-col bg-login'>
             <AuthHeader/>

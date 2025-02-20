@@ -13,4 +13,8 @@ class CustomRegisterSerializer(RegisterSerializer):
                 raise serializers.ValidationError(
                     "Este e-mail está em uso, mas ainda não foi verificado. Verifique seu e-mail ou utilize outro."
                 )
+            if email_address and email_address.verified:
+                raise serializers.ValidationError(
+                    "Este e-mail está em uso e já foi verificado. Utilize outro email."
+                )
         return value
