@@ -7,6 +7,9 @@ frontend/.env
 
 # Ignorar dependências do backend
 backend/__pycache__/
+backend/api_root/__pycache__/
+backend/authentication/__pycache__/
+backend/exercises/__pycache__/
 backend/static/
 
 # Ignorar dependências do frontend
