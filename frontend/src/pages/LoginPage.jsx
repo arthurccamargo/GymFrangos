@@ -9,7 +9,7 @@ import GoogleButton from '@/components/auth/GoogleButton';
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
   const [formData, setFormData] = useState({ // Hook para gerenciar estado do form
-    username_or_email:'',
+    email:'',
     password: ''
   })
 
@@ -19,7 +19,7 @@ const LoginPage = () => {
     e.preventDefault() // impede que recarregue a página
     try {
       const response = await axios.post('http://localhost:8000/auth/login/', {
-        username_or_email: formData.username_or_email,
+        email: formData.email,
         password: formData.password
       });
 
@@ -46,10 +46,10 @@ const LoginPage = () => {
             {/* Campo de Email */}
             <div className="relative w-full">
               <input
-                type="text"
-                placeholder="Nome de usuário ou email"
-                value={formData.username_or_email}
-                onChange={(e) => setFormData({ ...formData, username_or_email: e.target.value })}
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
