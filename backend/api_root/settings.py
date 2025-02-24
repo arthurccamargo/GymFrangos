@@ -96,6 +96,11 @@ LOGIN_REDIRECT_URL = '/dashboard'
 LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
+# Autentique se já existir uma conta local com este endereço de e-mail
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+# Conecte a conta local e a conta social se já existir uma conta local com esse endereço de e-mail
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
