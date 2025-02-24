@@ -11,5 +11,4 @@ urlpatterns = [
     path('', include('dj_rest_auth.urls')),  # Endpoints de autenticação (login, logout, etc.)
     path('registration/', CustomRegisterView.as_view()),
     path('registration/verify-email/', VerifyEmailView.as_view(), name='account_confirm_email'),
-    path('auth/account/', include('allauth.urls')), # URLs para confirmação de e-mail e outras ações
 ]

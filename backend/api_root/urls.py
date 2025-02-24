@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls), # Rota para o painel de administração do Django
     path('auth/', include('authentication.urls')),  # Inclui as URLs de authentication
     path('api/exercises/', include('exercises.urls')),  # Inclui as URLs de exercises
+    path('accounts/', include('allauth.urls')), # URLs para confirmação de e-mail e outras ações
 
     # Se a URL não for de uma API, serve o index.html do React
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='react'),

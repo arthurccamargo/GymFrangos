@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +61,8 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
+SITE_ID = 1
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Exibe o e-mail no console
 
 # garantir que o Django use o modelo de usuário personalizado
@@ -85,20 +88,6 @@ REST_AUTH = {
     'JWT_AUTH_REFRESH_COOKIE': 'jwt-refresh',  # Nome do cookie para armazenar o token de refresh
 }
 
-MIDDLEWARE = [
-    "allauth.account.middleware.AccountMiddleware", # Add the account middleware
-
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    
-]
-
 # Configurações específicas para Google
 CLIENT_ID = config('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
@@ -109,16 +98,30 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client
-        # credentials, or list them here:
         'APP': {
             'client_id': CLIENT_ID,
             'secret': CLIENT_SECRET,
             'key': ''
+        },
+        'SCOPE': ['profile', 'email'], # app solicita acesso ao perfil básico do usuário e ao endereço de email
+        'AUTH_PARAMS': {
+            'access_type': 'online', # só precisa de acesso aos dados do usuário enquanto ele estiver online
         }
     }
 }
+
+MIDDLEWARE = [
+    "allauth.account.middleware.AccountMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    
+]
 
 ROOT_URLCONF = 'backend.api_root.urls'
 
