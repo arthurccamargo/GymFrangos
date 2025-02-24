@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
 
     # Define quais campos são obrigatórios ao criar um superusuário, aplicado APENAS ao superusuário
     # Por padrão, os campos obrigatórios são USERNAME_FIELD(por padrão username) e password
-    REQUIRED_FIELDS = [] # Nenhum campo extra obrigatório para superusuário, além de email que foi colocado como obrigatório
+    REQUIRED_FIELDS = ['username'] # username obrigatório para superusuário, além de email que foi colocado como obrigatório
     # createsuperuser só pedirá email e password.
 
     def __str__(self):
