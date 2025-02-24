@@ -9,7 +9,9 @@ frontend/.env
 backend/__pycache__/
 backend/api_root/__pycache__/
 backend/authentication/__pycache__/
+backend/authentication/migrations/
 backend/exercises/__pycache__/
+backend/exercises/migrations/
 backend/static/
 
 # Ignorar dependências do frontend
