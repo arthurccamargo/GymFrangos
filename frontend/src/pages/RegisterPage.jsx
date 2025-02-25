@@ -4,6 +4,7 @@ import axios from 'axios';
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
+import GoogleButton from '../components/auth/GoogleButton';
 
 const RegisterPage = () => {
     const navigate = useNavigate();
@@ -73,7 +74,7 @@ const RegisterPage = () => {
                         <div className="relative w-full">
                             <input
                                 type="email"
-                                placeholder="Email"
+                                placeholder="Email de usuário"
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
@@ -192,6 +193,7 @@ const RegisterPage = () => {
                             route='/login'
                             text='Já tem uma conta? Entre'
                         />
+                        <GoogleButton/>
                     </form>
                 </main>
             </div>
