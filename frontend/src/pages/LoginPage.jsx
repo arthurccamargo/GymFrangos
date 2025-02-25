@@ -106,7 +106,7 @@ const LoginPage = () => {
               route='/register'
               text='Criar Conta'
             />
-            <GoogleButton></GoogleButton>
+            <GoogleButton/>
           </form>
         </main>
       </div>
