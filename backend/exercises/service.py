@@ -20,7 +20,7 @@ def fetch_exercises():
     page = 0  # Inicializa a variável da página
     exercises_saved = 0  # Contador de exercícios salvos
 
-    while True:  # Loop para buscar todas as páginas da API
+    while exercises_saved < 100:  # Loop para buscar os 100 primeiras exercicios da API
         # Faz a requisição GET para a API, passando a página atual e o limite de 10 exercícios por vez
         response = requests.get(f"{EXERCISEDB_API_URL}?offset={page*10}&limit=10", headers=HEADERS)
         data = response.json() # converte a resposta JSON para um dicionário Python
@@ -41,6 +41,9 @@ def fetch_exercises():
                     'body_part': item['bodyPart'],
                     'equipment': item['equipment'],
                     'gif_url': item['gifUrl'],
+                    'target' : item['target'],
+                    'secondaryMuscles' : item['secondaryMuscles'],
+                    'instructions' : item['instructions'],
                 }
             )
             exercises_saved += 1  # incrementa o contador de exercícios salvos
