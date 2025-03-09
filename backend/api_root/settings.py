@@ -86,6 +86,9 @@ REST_AUTH = {
     'USE_JWT': True,  # Usar JWT para autenticação
     'JWT_AUTH_COOKIE': 'jwt-auth',  # Nome do cookie para armazenar o token JWT
     'JWT_AUTH_REFRESH_COOKIE': 'jwt-refresh',  # Nome do cookie para armazenar o token de refresh
+    'JWT_AUTH_HTTPONLY': True,  # Garante que os cookies são HTTP-only
+    'JWT_AUTH_SAMESITE': 'Lax',  # Evita envio de cookies em requisições externas não intencionais
+    'JWT_AUTH_SECURE': False,  # Apenas envia os cookies em conexões HTTPS - Ativar em produção
 }
 
 # Configurações específicas para Google
