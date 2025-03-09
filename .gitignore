@@ -12,8 +12,8 @@ backend/authentication/__pycache__/
 backend/authentication/migrations/
 backend/exercises/__pycache__/
 backend/exercises/migrations/
-backend/static/
-backend/templates/
+backend/static/*
+backend/templates/*
 
 # Ignorar dependências do frontend
 frontend/node_modules/

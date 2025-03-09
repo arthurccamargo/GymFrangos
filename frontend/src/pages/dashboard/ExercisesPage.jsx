@@ -63,7 +63,7 @@ const ExercisePage = () => {
     <div className="container mx-auto p-2 max-w-5xl">
       {/* Barra de Pesquisa e Filtros */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6 sticky top-4 z-10">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           {/* Search */}
           <div className="relative col-span-3">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -82,7 +82,7 @@ const ExercisePage = () => {
             value={selectedBodyPart}
             onChange={(e) => setSelectedBodyPart(e.target.value)} //usuário escolhe uma parte do corpo e selectedBodyPart é atualizado
           >
-            <option value="">Partes do corpo</option>
+            <option value="">Corpo</option>
             {bodyParts.map(part => (
               <option key={part} value={part}>{part}</option>
             ))}
@@ -94,6 +94,17 @@ const ExercisePage = () => {
             onChange={(e) => setSelectedExercise(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
           >
             <option value="">Equipamentos</option>
+            {equipmentsUsed.map(eq => (
+              <option key={eq} value={eq}>{eq}</option>
+            ))}
+          </select>
+
+          <select
+            className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            value={selectedExercise}
+            onChange={(e) => setSelectedExercise(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
+          >
+            <option value="">Dificuldade</option>
             {equipmentsUsed.map(eq => (
               <option key={eq} value={eq}>{eq}</option>
             ))}
