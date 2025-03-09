@@ -4,12 +4,8 @@ Uma aplicacao web para gerenciamento e visualizacao de exercicios de academia, c
 
 ## Screenshots
 <img src="https://github.com/user-attachments/assets/495ed168-8b13-49a1-bc17-45b97856fc4a" width="300" alt="Image">
-<<<<<<< HEAD
 <img src="https://github.com/user-attachments/assets/8956a375-3bf8-4441-a3ee-85e6cfca8277" width="300" alt="Image">
 <img src="https://github.com/user-attachments/assets/f1c6f0fb-41ef-4c3f-9058-8372b7315e99" width="300" alt="Image">
-=======
-<img src="https://github.com/user-attachments/assets/30462047-50b3-4e02-bd05-d68aefcec7e2" width="300" alt="Image">
->>>>>>> f06a636b1e37fc8998aab37799fd1af0e40d42c3
 
 ## Tecnologias Utilizadas
 
