@@ -28,8 +28,8 @@ const AuthButton = ({ text, onClick, route,type= "button", extraClasses = "" }) 
 // Validação de tipos de propriedades no React. Ele garante que as props passadas para o componente sejam do tipo correto
 AuthButton.propTypes = {
     text: PropTypes.string.isRequired, //indica que a prop é obrigatória e deve ser do tipo string
-    route: PropTypes.string.isRequired,
-    onClick: PropTypes.string.isRequired,
+    route: PropTypes.string,
+    onClick: PropTypes.string,
     type: PropTypes.string,
     extraClasses: PropTypes.string, //indica que a prop é opcional, mas deve ser uma string
   };
