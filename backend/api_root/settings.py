@@ -95,8 +95,8 @@ REST_AUTH = {
 CLIENT_ID = config('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
 
-LOGIN_REDIRECT_URL = '/dashboard'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'http://localhost:5173/dashboard'
+LOGOUT_REDIRECT_URL = 'http://localhost:5173/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Autentique se já existir uma conta local com este endereço de e-mail
@@ -208,7 +208,10 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ORIGIN_ALLOW_ALL= True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",  # URL do frontend em desenvolvimento
+# ]
+CORS_ORIGIN_ALLOW_ALL= True # Não recomendado em produção
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

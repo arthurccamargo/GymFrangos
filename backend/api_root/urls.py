@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -7,7 +7,4 @@ urlpatterns = [
     path('auth/', include('authentication.urls')),  # Inclui as URLs de authentication
     path('api/exercises/', include('exercises.urls')),  # Inclui as URLs de exercises
     path('accounts/', include('allauth.urls')), # URLs para confirmação de e-mail e outras ações
-
-    # Se a URL não for de uma API, serve o index.html do React
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html'), name='react'),
 ]
