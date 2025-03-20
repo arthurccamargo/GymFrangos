@@ -37,7 +37,7 @@ const RegisterPage = () => {
             
             // Redirect to login after a brief delay
             setTimeout(() => {
-                navigate("/login");
+                navigate("/verifyemail");
             }, 500);
         } catch (error) {
             if (error.response && error.response.data) {
