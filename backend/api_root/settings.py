@@ -90,13 +90,13 @@ REST_AUTH = {
     'JWT_AUTH_SAMESITE': 'Lax',  # Evita envio de cookies em requisições externas não intencionais, protege contra CSRF
     'JWT_AUTH_SECURE': False,  # Apenas envia os cookies em conexões HTTPS - Ativar em produção
 }
+CORS_ALLOW_CREDENTIALS = True  # Permite envio de cookies/tokens nas requisições
 
 # Configurações específicas para Google
 CLIENT_ID = config('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
 
 LOGIN_REDIRECT_URL = 'http://localhost:5173/dashboard'
-LOGOUT_REDIRECT_URL = 'http://localhost:5173/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 # Autentique se já existir uma conta local com este endereço de e-mail
@@ -116,6 +116,11 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online', # só precisa de acesso aos dados do usuário enquanto ele estiver online
         }
     }
+}
+
+# Configuração extra para garantir que os cookies JWT sejam apagados no logout
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
 }
 
 MIDDLEWARE = [
