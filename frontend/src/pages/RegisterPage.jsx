@@ -45,7 +45,7 @@ const RegisterPage = () => {
                 let errorMessage = '';
     
                 if (data.username) {
-                    errorMessage += `Username: ${data.username[0]} \n`;
+                    errorMessage += `Usuário: ${data.username[0]} \n`;
                 }
                 if (data.email) {
                     errorMessage += `Email: ${data.email[0]} \n`;
