@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from allauth.account.models import EmailAddress
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
 from .models import CustomUser
 
 class CustomRegisterSerializer(RegisterSerializer):
@@ -18,3 +19,13 @@ class CustomRegisterSerializer(RegisterSerializer):
                     "Este e-mail está em uso e já foi verificado. Utilize outro email."
                 )
         return value
+
+class CustomUserSerializer(UserDetailsSerializer):
+    username = serializers.CharField(read_only=False)  # Força a inclusão do username
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'first_name', 'last_name']
+        extra_kwargs = {
+            'email': {'read_only': True},  # Opcional
+        }

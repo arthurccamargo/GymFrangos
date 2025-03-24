@@ -18,16 +18,11 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault() // impede que recarregue a página
     try {
-      const response = await axios.post('http://localhost:8000/auth/login/', {
+      await axios.post('http://localhost:8000/auth/login/', {
         email: formData.email,
         password: formData.password
-      });
-
-      const data = response.data;
-
-      localStorage.setItem('access', data.access)
-      localStorage.setItem('refresh', data.refresh)
-
+      }, { withCredentials: true });
+  
       navigate("/dashboard");
     } catch (error) {
       setError(error.response?.data?.message || 'Login falhou. Tente novamente!');
