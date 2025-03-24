@@ -89,6 +89,9 @@ REST_AUTH = {
     'JWT_AUTH_HTTPONLY': True,  # Garante que os cookies são HTTP-only, protege contra ataques XSS
     'JWT_AUTH_SAMESITE': 'Lax',  # Evita envio de cookies em requisições externas não intencionais, protege contra CSRF
     'JWT_AUTH_SECURE': False,  # Apenas envia os cookies em conexões HTTPS - Ativar em produção
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserSerializer',
+    # Configuração extra para garantir que os cookies JWT sejam apagados no logout
+    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
 }
 CORS_ALLOW_CREDENTIALS = True  # Permite envio de cookies/tokens nas requisições
 
@@ -116,11 +119,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online', # só precisa de acesso aos dados do usuário enquanto ele estiver online
         }
     }
-}
-
-# Configuração extra para garantir que os cookies JWT sejam apagados no logout
-REST_AUTH_SERIALIZERS = {
-    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
 }
 
 MIDDLEWARE = [
