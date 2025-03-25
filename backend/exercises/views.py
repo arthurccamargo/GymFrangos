@@ -13,7 +13,7 @@ class ExerciseListView(generics.ListAPIView): # Permite consultas GET para obter
     filter_backends = [DjangoFilterBackend, SearchFilter] # Define dois tipos de filtragem para a API
 
     # Permite filtragem por campos exatos na URL 
-    filterset_fields = ['body_part', 'equipment'] # É sensível a maiúsculas, ex:/exercises/?body_part=chest
+    filterset_fields = ['body_part', 'equipment', 'difficulty'] # É sensível a maiúsculas, ex:/exercises/?body_part=chest
 
     # Permite buscas parciais no campo name
     search_fields = ['name'] # NÂO sensível a maiúsculas, ex: /exercises/?search=cable

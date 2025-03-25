@@ -1,4 +1,4 @@
-import { Home, Dumbbell } from 'lucide-react';
+import { Home, Dumbbell, User, CircleUserRound } from 'lucide-react';
 
 export const menuItems = [
   { 
@@ -10,5 +10,10 @@ export const menuItems = [
     name: "Treinos", 
     path: "/dashboard/workouts",
     icon: <Dumbbell className="w-6 h-6" />
+  },
+  { 
+    name: "Perfil", 
+    path: "/dashboard/profile",
+    icon: <CircleUserRound className="w-6 h-6" />
   }
 ];
