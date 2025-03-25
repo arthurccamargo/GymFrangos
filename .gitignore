@@ -28,3 +28,4 @@ frontend/dist/
 db.sqlite3
 
 
+.env
