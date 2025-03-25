@@ -4,6 +4,7 @@ venv/
 # Ignorar arquivos de ambiente do Django e React
 backend/.env
 frontend/.env
+.env
 
 # Ignorar dependências do backend
 backend/__pycache__/
