@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { Search } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -13,37 +13,112 @@ const ExercisePage = () => {
   const [searchTerm, setSearchTerm] = useState(''); // Armazena o valor da barra de pesquisa
   const [selectedBodyPart, setSelectedBodyPart] = useState(''); // Armazena a parte do corpo selecionada no filtro
   const [selectedExercise, setSelectedExercise] = useState(''); // Armazena o equipamento selecionado no filtro
+  const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [clickedExercise, setClickedExercise] = useState(null); // Armazena o exercício que foi clicado pelo usuário para abrir o modal de detalhes
   const [exercises, setExercises] = useState([]); // Armazena a lista de exercícios recebida da API
   const [loading, setLoading] = useState(true); // Indica se os exercícios ainda estão sendo carregados. True pois a requisição ainda não foi concluída
+  const [loadingMore, setLoadingMore] = useState(false); // Indica se mais exercícios estão sendo carregados
   const [error, setError] = useState(null); // Armazena uma mensagem de erro caso a requisição falhe, null == false
+  const [page, setPage] = useState(1); // Controla a página atual para paginação
+  const [hasMore, setHasMore] = useState(true); // Indica se há mais exercícios para carregar
+  const observer = useRef(); // Referência para o observer de interseção
+  const lastExerciseElementRef = useRef(); // Referência para o último elemento da lista
 
   /* 
   useEffect é um hook do React, ele recebe dois argumentos
   Uma função de efeito (que será executada quando o componente renderizar), nesse caso fetchExercises
   Um array de dependências, nesse caso está vazio,então a função será executada apenas uma vez, quando o componente for montado
   */
-  useEffect(() => { 
-    /* Busca os exercícios na API e atualiza exercises com os resultados */
-    const fetchExercises = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/api/exercises/');
-        // salva os exercícios da API em exercises, um array vazio [] é usado para evitar erros caso response.data.results seja undefined ou null
-        setExercises(response.data.results || []); 
-      } catch (err) {
-        console.error("Erro ao buscar exercícios:", err);
-        setError("Erro ao carregar exercícios.");
-      } finally {
-        setLoading(false); // executado independentemente de o bloco try ter sucesso ou erro
+  // Função para buscar exercícios com paginação
+  const fetchExercises = useCallback(async (pageNumber = 1, shouldAppend = false) => {
+    try {
+      // Se estiver carregando a primeira página, mostra o indicador de carregamento principal
+      if (pageNumber === 1) {
+        setLoading(true);
+      } else {
+        // Se estiver carregando mais exercícios, mostra o indicador de carregamento de "carregar mais"
+        setLoadingMore(true);
+      }
+
+      // Calcula o offset com base na página atual (20 itens por página)
+      const offset = (pageNumber - 1) * 20;
+      const response = await axios.get(`http://localhost:8000/api/exercises/?limit=20&offset=${offset}`);
+      
+      const newExercises = response.data.results || [];
+      
+      // Verifica se há mais exercícios para carregar
+      setHasMore(newExercises.length === 20 && response.data.next !== null);
+      
+      // Atualiza a lista de exercícios (anexa ou substitui)
+      if (shouldAppend) {
+        setExercises(prev => [...prev, ...newExercises]);
+      } else {
+        setExercises(newExercises);
+      }
+    } catch (err) {
+      console.error("Erro ao buscar exercícios:", err);
+      setError("Erro ao carregar exercícios.");
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, []);
+
+  // Carrega a primeira página de exercícios quando o componente é montado
+  useEffect(() => {
+    fetchExercises(1, false);
+  }, [fetchExercises]);
+  
+  // Configura o observer de interseção para detectar quando o usuário chega ao final da lista
+  useEffect(() => {
+    // Função para observar o último elemento da lista
+    const handleObserver = (entries) => {
+      const [entry] = entries;
+      // Se o elemento estiver visível e houver mais exercícios para carregar
+      if (entry.isIntersecting && hasMore && !loading && !loadingMore) {
+        setPage(prevPage => {
+          const nextPage = prevPage + 1;
+          fetchExercises(nextPage, true);
+          return nextPage;
+        });
       }
     };
 
-    fetchExercises(); // chamada da função, após definição dela
-  }, []);
+    // Cria um novo observer
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+    
+    observer.current = new IntersectionObserver(handleObserver, options);
+    
+    // Observa o último elemento da lista, se existir
+    if (lastExerciseElementRef.current) {
+      observer.current.observe(lastExerciseElementRef.current);
+    }
+    
+    // Limpa o observer quando o componente é desmontado
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, [hasMore, loading, loadingMore, fetchExercises]);
 
   
   const bodyParts = [...new Set(exercises.map(ex => ex.body_part))]; // Cria lista únicas de partes do corpo para filtro, Set elimina duplicados
   const equipmentsUsed = [...new Set(exercises.map(ex => ex.equipment))]; // Cria lista únicas de equipamentos para filtro
+  const difficultyLevel = [...new Set(exercises.map(ex => ex.difficulty))]
+
+  // Efeito para resetar a paginação e buscar novos exercícios quando os filtros mudam
+  useEffect(() => {
+    // Reseta a página e busca exercícios novamente quando os filtros mudam
+    setPage(1);
+    // Implementação futura: enviar os filtros para o backend
+    // Por enquanto, continuamos filtrando no frontend
+    fetchExercises(1, false);
+  }, [selectedBodyPart, selectedExercise, selectedDifficulty, fetchExercises]);
 
   /* Filtra os exercícios com base no que foi digitado na barra de pesquisa e no filtro de partes do corpo */
   const filteredExercises = exercises.filter(exercise => {
@@ -56,7 +131,8 @@ const ExercisePage = () => {
     // Se uma parte do corpo foi selecionada, true virou false com o !,logo, verifica se o parte do corpo do exercício de filter é igual ao selecionado
     const matchesBodyPart = !selectedBodyPart || exercise.body_part === selectedBodyPart;
     const matchesEquipment = !selectedExercise || exercise.equipment === selectedExercise;
-    return matchesSearch && matchesBodyPart && matchesEquipment; // Retorna somente os exercícios que atendem aos 3 critérios
+    const matchesDifficulty = !selectedDifficulty || exercise.difficulty === selectedDifficulty;
+    return matchesSearch && matchesBodyPart && matchesEquipment && matchesDifficulty; // Retorna somente os exercícios que atendem aos 3 critérios
   });
 
   return (
@@ -101,11 +177,11 @@ const ExercisePage = () => {
 
           <select
             className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={selectedExercise}
-            onChange={(e) => setSelectedExercise(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
+            value={selectedDifficulty}
+            onChange={(e) => setSelectedDifficulty(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
           >
             <option value="">Dificuldade</option>
-            {equipmentsUsed.map(eq => (
+            {difficultyLevel.map(eq => (
               <option key={eq} value={eq}>{eq}</option>
             ))}
           </select>
@@ -131,20 +207,35 @@ const ExercisePage = () => {
       
       {!loading && !error && (
         <div className="space-y-2">
-          {filteredExercises.map((exercise) => (
-            <div
-              key={exercise.id}
-            //usuário clica em um exercício, setClickedExercise(exercise) atualiza o estado e exibe o modal
-              onClick={() => setClickedExercise(exercise)} 
-              className="bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
-            >
-              <h2 className="text-lg font-semibold">{exercise.name}</h2>
-              <p className="text-gray-600 text-sm mt-1">{exercise.body_part}</p>
+          {filteredExercises.map((exercise, index) => {
+            // Verifica se é o último item da lista para adicionar a referência
+            const isLastItem = index === filteredExercises.length - 1;
+            
+            return (
+              <div
+                key={exercise.id}
+                // Adiciona a referência ao último elemento para o IntersectionObserver
+                ref={isLastItem ? lastExerciseElementRef : null}
+                // Usuário clica em um exercício, setClickedExercise(exercise) atualiza o estado e exibe o modal
+                onClick={() => setClickedExercise(exercise)} 
+                className="bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              >
+                <h2 className="text-lg font-semibold">{exercise.name}</h2>
+                <p className="text-gray-600 text-sm mt-1">{exercise.body_part}</p>
+              </div>
+            );
+          })}
+
+          {/* Indicador de carregamento para mais exercícios */}
+          {loadingMore && (
+            <div className="flex justify-center py-4">
+              <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+              <span className="ml-2 text-gray-500">Carregando mais exercícios...</span>
             </div>
-          ))}
+          )}
 
           {/* Se não houver exercícios na lista filtrada, exibe uma mensagem amigável para o usuário */}
-          {filteredExercises.length === 0 && (
+          {filteredExercises.length === 0 && !loadingMore && (
             <div className="text-center py-8 text-gray-500">
               Nenhum exercício encontrado com os filtros selecionados.
             </div>
@@ -209,3 +300,10 @@ const ExercisePage = () => {
 };
 
 export default ExercisePage;
+
+// ARRUMAR
+// paginacao
+// filtros (fazer lista de partes do corpo)
+// pesquisa englobar paginacao
+// filtro dificuldades (fazer igual corpo e equipamentos)
+
