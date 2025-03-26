@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { User, Mail, Key, Edit, Save, X } from 'lucide-react';
+import LogoutButton from '@/components/auth/LogoutButton';
 
 const ProfilePage = () => {
   // Estado para controlar o modo de edição
@@ -196,6 +197,7 @@ const ProfilePage = () => {
               <Key className="w-4 h-4" />
               Redefinir Senha
             </button>
+            <LogoutButton></LogoutButton>
           </div>
         </div>
       </div>

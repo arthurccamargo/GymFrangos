@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { menuItems } from './navData';
-import LogoutButton from "../auth/LogoutButton";
 
 const Sidebar = () => {
 
@@ -23,9 +22,6 @@ const Sidebar = () => {
               </Link>
             </li>
           ))}
-          <li>
-            <LogoutButton/>
-          </li>
         </ul>
       </nav>
     </div>
