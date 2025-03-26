@@ -1,4 +1,4 @@
-import { Home, Dumbbell, User, CircleUserRound } from 'lucide-react';
+import { Home, Dumbbell, CircleUserRound } from 'lucide-react';
 
 export const menuItems = [
   { 
