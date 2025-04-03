@@ -20,6 +20,9 @@ backend/templates/*
 frontend/node_modules/
 frontend/dist/
 
+# Ignorar credenciais do Firebase
+backend/firebase/serviceAccountKey.json
+
 # Ignorar arquivos do sistema
 *.log
 .DS_Store

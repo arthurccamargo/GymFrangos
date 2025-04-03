@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
-from authentication.firebase import firebase_admin
+from backend.firebase.firebase import firebase_admin
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

@@ -33,10 +33,20 @@ const RegisterPage = () => {
         setIsSigningIn(true); // Desativar o botão e evitar múltiplos cliques durante o registro.
 
         try {
+            // Primeiro verifica se o username já existe no banco de dados
+            const usernameCheck = await fetch('http://127.0.0.1:8000/auth/check-username/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: formData.username }),
+            });
 
-            // Criar usuario no Firebase Authentication
+            const usernameData = await usernameCheck.json();
+            if (!usernameCheck.ok) {
+                throw new Error(usernameData.error || 'Username já existe ou ocorreu um erro.');
+            }
+
+            // Se o username estiver disponivel, cria usuario no Firebase Authentication
             await doCreateUserWithEmailAndPassword(formData.email, formData.password);
-
             await auth.currentUser?.reload(); // Atualiza o usuário
             const user = auth.currentUser;
             
@@ -45,7 +55,6 @@ const RegisterPage = () => {
             }
 
             const idToken = await user.getIdToken(); // Obtém o token de autenticação do usuário logado
-            console.log("Token JWT:", idToken);
 
             // Enviar os dados do usuário para o backend Django
             const response = await fetch('http://127.0.0.1:8000/auth/register/', {
@@ -57,20 +66,14 @@ const RegisterPage = () => {
                 body: JSON.stringify({
                     username: formData.username,
                 }),
-            });
-
-            console.log("Status da resposta:", response.status);
-            console.log("Headers da resposta:", [...response.headers.entries()]);       
+            });      
             
-            let data;
-            try {
-                data = await response.json();
-            } catch {
-                throw new Error('Erro ao processar resposta do servidor.');
-            }
-
+            const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.message || 'Erro ao registrar usuário no backend.');
+                // Se der erro aqui, o usuário já foi criado no Firebase!
+                // pode deletá-lo para evitar inconsistência
+                await user.delete();
+                throw new Error(data.error || 'Erro ao registrar no banco de dados.');
             }
 
             setSuccess('Conta criada com sucesso!');
