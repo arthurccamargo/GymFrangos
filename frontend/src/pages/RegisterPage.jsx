@@ -1,65 +1,111 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+//import { useNavigate } from "react-router-dom";
+import { doCreateUserWithEmailAndPassword } from '../firebase/auth';
+import { auth } from '../firebase/firebaseConfig';
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '../components/auth/GoogleButton';
 
 const RegisterPage = () => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         email: '',
         username: '',
         password: '',
         confirmPassword: ''
     })
-
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [isSigningIn, setIsSigningIn] = useState(false); // Estado para desativar o botão enquanto autentica
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError('');
+        setSuccess('');
+
         if (formData.password !== formData.confirmPassword) {
             setError('As senhas não correspondem! Tente novamente.');
             return;
         }
+
+        setIsSigningIn(true); // Desativar o botão e evitar múltiplos cliques durante o registro.
+
         try {
-            const response = await axios.post('http://localhost:8000/auth/registration/', {
-                email: formData.email,
-                username: formData.username,
-                password1: formData.password,
-                password2: formData.confirmPassword
+
+            // Criar usuario no Firebase Authentication
+            await doCreateUserWithEmailAndPassword(formData.email, formData.password);
+
+            await auth.currentUser?.reload(); // Atualiza o usuário
+            const user = auth.currentUser;
+            
+            if (!user) {
+                throw new Error('Erro ao obter dados do usuário. Tente novamente.');
+            }
+
+            const idToken = await user.getIdToken(); // Obtém o token de autenticação do usuário logado
+            console.log("Token JWT:", idToken);
+
+            // Enviar os dados do usuário para o backend Django
+            const response = await fetch('http://127.0.0.1:8000/auth/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken}`
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                }),
             });
 
-            setSuccess('Conta criada com sucesso!');
-            setError('');
+            console.log("Status da resposta:", response.status);
+            console.log("Headers da resposta:", [...response.headers.entries()]);       
             
-            // Redirect to login after a brief delay
-            setTimeout(() => {
-                navigate("/verifyemail");
-            }, 500);
-        } catch (error) {
-            if (error.response && error.response.data) {
-                const data = error.response.data;
-                let errorMessage = '';
-    
-                if (data.username) {
-                    errorMessage += `Usuário: ${data.username[0]} \n`;
-                }
-                if (data.email) {
-                    errorMessage += `Email: ${data.email[0]} \n`;
-                }
-                if (data.password1) {
-                    errorMessage += `Senha: ${data.password1[0]} \n`;
-                }
-    
-                setError(errorMessage || 'Erro desconhecido ao tentar registrar.');
-            } else {
-                setError('Falha na comunicação com o servidor.');
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                throw new Error('Erro ao processar resposta do servidor.');
             }
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Erro ao registrar usuário no backend.');
+            }
+
+            setSuccess('Conta criada com sucesso!');
+            
+        } catch (error) {
+            handleFirebaseError(error);
+        } finally { // independentemente de sucesso ou falha
+            setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
         }
+    }
+
+    const handleFirebaseError = (error) => {
+        let errorMessage = 'Ocorreu um erro ao tentar registrar.';
+        
+        if (error.code) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    errorMessage = 'Este email já está em uso. Tente outro.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'O email informado não é válido.';
+                    break;
+                case 'auth/weak-password':
+                    errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+                    break;
+                default:
+                    errorMessage = 'Falha ao criar conta. Verifique seus dados.';
+            }
+        } else if (error.message) {
+            errorMessage = error.message;
+        }
+
+        setError(errorMessage);
     };
+
     return (
         <div className='min-h-screen flex flex-col bg-login'>
             <AuthHeader/>
@@ -187,6 +233,7 @@ const RegisterPage = () => {
                             type="submit"
                             text='Criar Conta'
                             extraClasses="mt-5"
+                            disabled={isSigningIn}
                         />
                         <AuthButton
                             type="button"

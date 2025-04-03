@@ -1,8 +1,9 @@
+import { doSignInWithGoogle } from '@/firebase/auth';
 import { FcGoogle } from 'react-icons/fc';
 
 const GoogleButton = () => {
   const handleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/accounts/google/login/";
+    doSignInWithGoogle()
   };
 
   return (

@@ -1,32 +1,35 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { doSignInWithEmailAndPassword } from '@/firebase/auth';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
-  const [formData, setFormData] = useState({ // Hook para gerenciar estado do form
+
+  const [formData, setFormData] = useState({ // Hook para gerenciar estado do formulario
     email:'',
     password: ''
-  })
-
-  const [error, setError] = useState('') // estado para mensagens de erro
+  });
+  const [error, setError] = useState(''); // Hook para estado de mensagens de erro
+  const [isSigningIn, setIsSigningIn] = useState(false); // Estado para desativar o botão enquanto autentica
 
   const handleSubmit = async (e) => {
-    e.preventDefault() // impede que recarregue a página
+    e.preventDefault();
+    setError(''); // Limpa mensagens de erro
+    setIsSigningIn(true); // Para desativar o botão de login porque usuário está autenticando
+
     try {
-      await axios.post('http://localhost:8000/auth/login/', {
-        email: formData.email,
-        password: formData.password
-      }, { withCredentials: true });
-  
-      navigate("/dashboard");
-    } catch (error) {
-      setError(error.response?.data?.message || 'Login falhou. Tente novamente!');
+      await doSignInWithEmailAndPassword(formData.email, formData.password); // Chama a função de autenticação
+      navigate('/dashboard'); // Redireciona para a página inicial após login
+
+    } catch {
+      setError('Erro ao fazer login. Verifique suas credenciais.'); // Mensagem de erro
     }
+
+    setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
   };
 
   return (
@@ -35,6 +38,7 @@ const LoginPage = () => {
       <div>
         <main className='flex flex-grow flex-col items-center justify-center'>
           <h1 className="mb-8 text-white text-4xl font-bold font-display-baloo md:text-5xl text-center">Nenhum frango<br/>fica para trás</h1>
+
           {error && <p className="text-red-500 text-center">{error}</p>}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-gray-400 w-60 md:w-75 max-w-md">
@@ -93,15 +97,16 @@ const LoginPage = () => {
             {/* Botões */}
             <AuthButton 
               type="submit"
-              text='Entrar'
+              text={isSigningIn ? 'Entrando...' : 'Entrar'}
               extraClasses="mt-5"
+              disabled={isSigningIn}
             />
             <AuthButton
               type="button"
               route='/register'
               text='Criar Conta'
             />
-            <GoogleButton/>
+            <GoogleButton disabled={isSigningIn} />
           </form>
         </main>
       </div>
