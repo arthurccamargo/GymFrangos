@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,52 +44,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-      # Apps do projeto
-    'gymfrangos',
+    # Apps do projeto
     "authentication",  # App de autenticação
-    "exercises",  # App de exercícios
-
-    'rest_framework_simplejwt',
-    'rest_framework.authtoken',
-    'dj_rest_auth',
-    'dj_rest_auth.registration',  # Para registro (signup)
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    "exercises",  # App de exercícios,
 
     'django_filters',
 ]
 CORS_ALLOW_CREDENTIALS = True  # Permite envio de cookies/tokens nas requisições
 
-# Configurações específicas para Google
-CLIENT_ID = config('GOOGLE_CLIENT_ID')
-CLIENT_SECRET = config('GOOGLE_CLIENT_SECRET')
-
-LOGIN_REDIRECT_URL = 'http://localhost:5173/dashboard'
-SOCIALACCOUNT_LOGIN_ON_GET = True
-
-# Autentique se já existir uma conta local com este endereço de e-mail
-SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
-# Conecte a conta local e a conta social se já existir uma conta local com esse endereço de e-mail
-SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': CLIENT_ID,
-            'secret': CLIENT_SECRET,
-            'key': ''
-        },
-        'SCOPE': ['profile', 'email'], # app solicita acesso ao perfil básico do usuário e ao endereço de email
-        'AUTH_PARAMS': {
-            'access_type': 'online', # só precisa de acesso aos dados do usuário enquanto ele estiver online
-        }
-    }
-}
-
 MIDDLEWARE = [
-    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,7 +94,6 @@ STATICFILES_DIRS = [
 
 WSGI_APPLICATION = 'backend.api_root.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -142,25 +103,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, '..', 'db.sqlite3'),
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
 
 
 # Internationalization
@@ -191,7 +133,5 @@ REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
