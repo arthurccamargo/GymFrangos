@@ -4,7 +4,7 @@ import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '@/components/auth/GoogleButton';
-import { doSignInWithEmailAndPassword } from '@/firebase/auth';
+import { doSignInWithEmailAndPassword } from '../firebase/auth';
 
 const LoginPage = () => {
   const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
@@ -22,15 +22,25 @@ const LoginPage = () => {
     setIsSigningIn(true); // Para desativar o botão de login porque usuário está autenticando
 
     try {
-      await doSignInWithEmailAndPassword(formData.email, formData.password); // Chama a função de autenticação
-      navigate('/dashboard'); // Redireciona para a página inicial após login
+      console.log('Entrei no try'); // Log para depuração
+      // Chama a função autenticação com email e senha
+      const userCredential = await doSignInWithEmailAndPassword(formData.email, formData.password); 
+      console.log('Passei pelo doSignIn'); // Log para depuração
 
-    } catch {
-      setError('Erro ao fazer login. Verifique suas credenciais.'); // Mensagem de erro
+      const user = userCredential.user; // Pega o usuário autenticado
+      await user.reload(); // garante que você está verificando o status(dados) mais recente do usuário
+
+      navigate('/dashboard'); // Redireciona para a página inicial após login bem-sucedido
+    } catch(error) {
+      if (error.code === 'auth/invalid-credential') {
+        setError('E-mail ou senha incorretos. Verifique suas credenciais'); // Mensagem de erro
+      } else { // recebo error.code=undefined quando usuario tenta logar com credenciais certas e email nao verificado
+        setError('Erro ao fazer login. Certifica-se que verificou seu email.'); // Mensagem de erro
+      }
+    } finally {
+      setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
     }
-
-    setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
-  };
+};
 
   return (
     <div className='min-h-screen flex flex-col bg-login'>

@@ -76,7 +76,7 @@ const RegisterPage = () => {
                 throw new Error(data.error || 'Erro ao registrar no banco de dados.');
             }
 
-            setSuccess('Conta criada com sucesso!');
+            setSuccess('Conta criada com sucesso! Um e-mail de verificação foi enviado. Por favor, verifique seu e-mail antes de fazer login.');
             
         } catch (error) {
             handleFirebaseError(error);
