@@ -13,6 +13,11 @@ backend/authentication/__pycache__/
 backend/authentication/migrations/
 backend/exercises/__pycache__/
 backend/exercises/migrations/
+backend/firebase/__pycache__/
+
+**/__pycache__/
+**/migrations/
+
 backend/static/*
 backend/templates/*
 
@@ -30,5 +35,3 @@ backend/firebase/serviceAccountKey.json
 # db
 db.sqlite3
 
-
-.env
