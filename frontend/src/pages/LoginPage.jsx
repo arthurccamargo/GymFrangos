@@ -1,14 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-=======
-import axios from 'axios';
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '@/components/auth/GoogleButton';
-<<<<<<< HEAD
 import { doSignInWithEmailAndPassword, doSendEmailVerification } from '../firebase/auth';
 
 const LoginPage = () => {
@@ -50,31 +45,6 @@ const LoginPage = () => {
       setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
     }
 };
-=======
-
-const LoginPage = () => {
-  const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
-  const [formData, setFormData] = useState({ // Hook para gerenciar estado do form
-    email:'',
-    password: ''
-  })
-
-  const [error, setError] = useState('') // estado para mensagens de erro
-
-  const handleSubmit = async (e) => {
-    e.preventDefault() // impede que recarregue a página
-    try {
-      await axios.post('http://localhost:8000/auth/login/', {
-        email: formData.email,
-        password: formData.password
-      }, { withCredentials: true });
-  
-      navigate("/dashboard");
-    } catch (error) {
-      setError(error.response?.data?.message || 'Login falhou. Tente novamente!');
-    }
-  };
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
 
   return (
     <div className='min-h-screen flex flex-col bg-login'>
@@ -82,10 +52,7 @@ const LoginPage = () => {
       <div>
         <main className='flex flex-grow flex-col items-center justify-center'>
           <h1 className="mb-8 text-white text-4xl font-bold font-display-baloo md:text-5xl text-center">Nenhum frango<br/>fica para trás</h1>
-<<<<<<< HEAD
 
-=======
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
           {error && <p className="text-red-500 text-center">{error}</p>}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-gray-400 w-60 md:w-75 max-w-md">
@@ -144,25 +111,16 @@ const LoginPage = () => {
             {/* Botões */}
             <AuthButton 
               type="submit"
-<<<<<<< HEAD
               text={isSigningIn ? 'Entrando...' : 'Entrar'}
               extraClasses="mt-5"
               disabled={isSigningIn}
-=======
-              text='Entrar'
-              extraClasses="mt-5"
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
             />
             <AuthButton
               type="button"
               route='/register'
               text='Criar Conta'
             />
-<<<<<<< HEAD
             <GoogleButton disabled={isSigningIn} />
-=======
-            <GoogleButton/>
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
           </form>
         </main>
       </div>

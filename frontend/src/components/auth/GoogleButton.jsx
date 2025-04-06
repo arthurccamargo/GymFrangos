@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useNavigate } from "react-router-dom";
 import { doSignInWithGoogle } from '@/firebase/auth';
 import { FcGoogle } from 'react-icons/fc';
@@ -31,13 +30,6 @@ const GoogleButton = () => {
         console.error("Erro:", error);
         // Mostra feedback de erro (Pode usar toast notification)
     }
-=======
-import { FcGoogle } from 'react-icons/fc';
-
-const GoogleButton = () => {
-  const handleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/accounts/google/login/";
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
   };
 
   return (
@@ -52,8 +44,4 @@ const GoogleButton = () => {
   );
 };
 
-<<<<<<< HEAD
 export default GoogleButton;
-=======
-export default GoogleButton;
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299

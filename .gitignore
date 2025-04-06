@@ -20,12 +20,9 @@ backend/templates/*
 frontend/node_modules/
 frontend/dist/
 
-<<<<<<< HEAD
 # Ignorar credenciais do Firebase
 backend/firebase/serviceAccountKey.json
 
-=======
->>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
 # Ignorar arquivos do sistema
 *.log
 .DS_Store
