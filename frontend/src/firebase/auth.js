@@ -5,22 +5,23 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     signOut, 
-    sendEmailVerification
+    sendEmailVerification,
 } from "firebase/auth";
 
 
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCredential.user);
+    await sendEmailVerification(userCredential.user); // envia email de verificação após criar conta
     return userCredential;
+}
+
+export const doSendEmailVerification = async (user) => {
+    await sendEmailVerification(user);
+    return user;
 }
 
 export const doSignInWithEmailAndPassword = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    if (!userCredential.user.emailVerified) {
-        await signOut(); // Desconecta o usuário se o email não estiver verificado
-        throw new Error('Por favor, verifique seu email antes de fazer login.');
-    }
     return userCredential;
 }
 
