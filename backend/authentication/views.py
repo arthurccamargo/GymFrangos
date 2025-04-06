@@ -139,3 +139,25 @@ class RegisterUserView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+
+@api_view(['GET'])
+# exige que request inclua um token válido (Firebase JWT) no cabeçalho Authorization
+def get_user_data(request, uid):
+    try:
+        user = UserProfile.objects.get(uid=uid)
+        # Serializa os dados
+        data = {
+            'uid': user.uid,
+            'email': user.email,
+            'username': user.username,
+            'height': user.height,
+            'weight': user.weight,
+            'gym': user.gym,
+            'created_at': user.created_at,
+            'updated_at': user.updated_at
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    except UserProfile.DoesNotExist:
+        return Response({"error": "Usuário não encontrado"}, 
+                        status=status.HTTP_404_NOT_FOUND)
+    
