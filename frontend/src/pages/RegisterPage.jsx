@@ -1,21 +1,31 @@
 import { useState } from 'react'
+<<<<<<< HEAD
 //import { useNavigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from '../firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
+=======
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '../components/auth/GoogleButton';
 
 const RegisterPage = () => {
+<<<<<<< HEAD
     //const navigate = useNavigate();
 
+=======
+    const navigate = useNavigate();
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
     const [formData, setFormData] = useState({
         email: '',
         username: '',
         password: '',
         confirmPassword: ''
     })
+<<<<<<< HEAD
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isSigningIn, setIsSigningIn] = useState(false); // Estado para desativar o botão enquanto autentica
@@ -25,10 +35,19 @@ const RegisterPage = () => {
         setError('');
         setSuccess('');
 
+=======
+
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
         if (formData.password !== formData.confirmPassword) {
             setError('As senhas não correspondem! Tente novamente.');
             return;
         }
+<<<<<<< HEAD
 
         setIsSigningIn(true); // Desativar o botão e evitar múltiplos cliques durante o registro.
 
@@ -109,6 +128,44 @@ const RegisterPage = () => {
         setError(errorMessage);
     };
 
+=======
+        try {
+            const response = await axios.post('http://localhost:8000/auth/registration/', {
+                email: formData.email,
+                username: formData.username,
+                password1: formData.password,
+                password2: formData.confirmPassword
+            });
+
+            setSuccess('Conta criada com sucesso!');
+            setError('');
+            
+            // Redirect to login after a brief delay
+            setTimeout(() => {
+                navigate("/verifyemail");
+            }, 500);
+        } catch (error) {
+            if (error.response && error.response.data) {
+                const data = error.response.data;
+                let errorMessage = '';
+    
+                if (data.username) {
+                    errorMessage += `Usuário: ${data.username[0]} \n`;
+                }
+                if (data.email) {
+                    errorMessage += `Email: ${data.email[0]} \n`;
+                }
+                if (data.password1) {
+                    errorMessage += `Senha: ${data.password1[0]} \n`;
+                }
+    
+                setError(errorMessage || 'Erro desconhecido ao tentar registrar.');
+            } else {
+                setError('Falha na comunicação com o servidor.');
+            }
+        }
+    };
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
     return (
         <div className='min-h-screen flex flex-col bg-login'>
             <AuthHeader/>
@@ -236,7 +293,10 @@ const RegisterPage = () => {
                             type="submit"
                             text='Criar Conta'
                             extraClasses="mt-5"
+<<<<<<< HEAD
                             disabled={isSigningIn}
+=======
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
                         />
                         <AuthButton
                             type="button"
@@ -252,4 +312,8 @@ const RegisterPage = () => {
     )
 }
 
+<<<<<<< HEAD
 export default RegisterPage
+=======
+export default RegisterPage
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299

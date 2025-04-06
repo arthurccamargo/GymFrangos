@@ -18,9 +18,13 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "esbuild": "^0.25.1",
+<<<<<<< HEAD
     "firebase": "^11.6.0",
     "lucide-react": "^0.475.0",
     "prop-types": "^15.8.1",
+=======
+    "lucide-react": "^0.475.0",
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
@@ -41,6 +45,10 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+<<<<<<< HEAD
     "vite": "^6.2.4"
+=======
+    "vite": "^6.2.3"
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
   }
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import uuid
 import firebase_admin
 import re
@@ -139,3 +140,10 @@ class RegisterUserView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+=======
+from dj_rest_auth.registration.views import RegisterView
+from .serializers import CustomRegisterSerializer
+
+class CustomRegisterView(RegisterView):
+    serializer_class = CustomRegisterSerializer
+>>>>>>> d33d9527923ee8f97dd47fc9d823d2c721df2299
