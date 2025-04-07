@@ -8,8 +8,59 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from .models import UserProfile
 from .serializers import UserProfileSerializer
+from .permissions import FirebaseIsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
+@permission_classes([AllowAny])  # Permite acesso não autenticado
+def generate_username(email, name=None):
+    """
+    Gera um username único baseado em email ou nome do Google.
+    1. Extrai a base do nome ou email
+    2. Remove caracteres inválidos
+    3. Adiciona sufixo numérico se necessário
+    """
+    # Passo 1: Cria base do username
+    if name:
+        base = re.sub(r'[^\w]', '', name).lower()[:20]  # Remove caracteres especiais
+    else:
+        base = email.split('@')[0][:20]  # Pega parte antes do @
+
+    # Passo 2: Verifica unicidade e adiciona sufixo se necessário
+    username = base
+    counter = 1
+    
+    while UserProfile.objects.filter(username=username).exists():
+        username = f"{base}_{counter}"
+        counter += 1
+        
+        # Previne loops infinitos (fallback seguro)
+        if counter > 100:
+            username = f"{base}_{uuid.uuid4().hex[:4]}"
+            break
+    
+    return username
+    
 
 @api_view(['POST'])
+@permission_classes([AllowAny])  # Permite acesso não autenticado
+def check_username(request):
+    print("\nRequestData: ", request.data)
+    username = request.data.get("username")
+    print("\nusername", username)
+    if not username:
+        return Response({"error": "Nome de usuário é necessário"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if UserProfile.objects.filter(username=username).exists():
+        return Response({"error": "Nome de usuário já existe"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response({"sucess": "Nome de usuário disponível"}, status=status.HTTP_200_OK)
+
+# ---------------------------------------------------------------------------------------------
+# VIEWS PROTEGIDAS POR AUTENTICAÇÃO FIREBASE
+# ---------------------------------------------------------------------------------------------
+@api_view(['POST'])
+@permission_classes([AllowAny])  # Permite acesso não autenticado
 def handle_social_login(request):
     try:
         # 1. Extrai o token do header Authorization
@@ -55,48 +106,8 @@ def handle_social_login(request):
         status=status.HTTP_400_BAD_REQUEST
     )
 
-def generate_username(email, name=None):
-    """
-    Gera um username único baseado em email ou nome do Google.
-    1. Extrai a base do nome ou email
-    2. Remove caracteres inválidos
-    3. Adiciona sufixo numérico se necessário
-    """
-    # Passo 1: Cria base do username
-    if name:
-        base = re.sub(r'[^\w]', '', name).lower()[:20]  # Remove caracteres especiais
-    else:
-        base = email.split('@')[0][:20]  # Pega parte antes do @
-
-    # Passo 2: Verifica unicidade e adiciona sufixo se necessário
-    username = base
-    counter = 1
-    
-    while UserProfile.objects.filter(username=username).exists():
-        username = f"{base}_{counter}"
-        counter += 1
-        
-        # Previne loops infinitos (fallback seguro)
-        if counter > 100:
-            username = f"{base}_{uuid.uuid4().hex[:4]}"
-            break
-    
-    return username
-    
-
-@api_view(['POST'])
-def check_username(request):
-    username = request.data.get("username")
-    if not username:
-        return Response({"error": "Nome de usuário é necessário"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    if UserProfile.objects.filter(username=username).exists():
-        return Response({"error": "Nome de usuário já existe"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    return Response({"sucess": "Nome de usuário disponível"}, status=status.HTTP_200_OK)
-
-
 class RegisterUserView(APIView):
+    permission_classes = [AllowAny]  # Permite acesso não autenticado
     def post(self, request):
         try:
             # Extrai o token do header Authorization
@@ -141,8 +152,12 @@ class RegisterUserView(APIView):
 
 
 @api_view(['GET'])
-# exige que request inclua um token válido (Firebase JWT) no cabeçalho Authorization
+@permission_classes([FirebaseIsAuthenticated]) # Permissão personalizada para autenticação Firebase
 def get_user_data(request, uid):
+    # Verifica se o UID solicitado corresponde ao UID do token
+    if request.user.get('uid') != uid:
+        return Response({"error": "Não autorizado"}, status=status.HTTP_403_FORBIDDEN)
+
     try:
         user = UserProfile.objects.get(uid=uid)
         # Serializa os dados
