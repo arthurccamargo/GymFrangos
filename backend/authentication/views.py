@@ -21,7 +21,7 @@ def handle_social_login(request):
             )
         id_token = auth_header.split(' ')[1] # Pega o token JWT enviado pelo Firebase
         # Verifica o token do Firebase 
-        decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=10) # Aceita 10 segundos de diferença
+        decoded_token = auth.verify_id_token(id_token)
         uid = decoded_token['uid']
 
         # 2. Verifica se usuário já existe
@@ -109,7 +109,7 @@ class RegisterUserView(APIView):
             
             id_token = auth_header.split(' ')[1] # Pega o token JWT enviado pelo Firebase
             # Verifica o token do Firebase 
-            decoded_token = auth.verify_id_token(id_token, clock_skew_seconds=10) # Aceita 10 segundos de diferença
+            decoded_token = auth.verify_id_token(id_token)
             uid = decoded_token['uid']
             email = decoded_token.get('email')
             username = request.data.get('username')

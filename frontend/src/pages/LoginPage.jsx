@@ -62,6 +62,7 @@ const LoginPage = () => {
                 type="email"
                 placeholder="Email"
                 value={formData.email}
+                autoComplete='username'
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
               />
@@ -87,6 +88,7 @@ const LoginPage = () => {
                 type="password"
                 placeholder="Senha"
                 value={formData.password}
+                autoComplete='current-password'
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="py-3 pl-10 rounded border-1 border-gray-500 w-full"
               />
