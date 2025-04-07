@@ -4,34 +4,59 @@ import { auth } from '../firebase/firebaseConfig'; // Importando a configuraçã
 import { onAuthStateChanged } from 'firebase/auth'; // Importando a função para verificar o estado de autenticação do usuário
 
 const AuthContext = React.createContext();
+export { AuthContext}
 
 export function AuthProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState(null); // estado de informações do usuário
-    const [userLoggedIn, setUserLoggedIn] = useState(true); // estado do usuário conectado
+    const [userLoggedIn, setUserLoggedIn] = useState(false); // estado do usuário conectado
     const [loading, setLoading] = useState(true); // estado de carregamento
+    const [userProfile, setUserProfile] = useState(null); // estado de dados do perfil do usuário no meu banco de dados
 
     useEffect(() => {
+        // Observa mudanças no estado de autenticação do Firebase, chama initializeUser quando o estado muda
         const unsubscribe = onAuthStateChanged(auth, initializeUser);
-        return unsubscribe; // unsubscribe é chamado quando o componente é desmontado
+        return unsubscribe; // Retorna uma função de limpeza para evitar memory leaks
     }, [])
 
-    // initializeUser é chamada ao ser efetuado login com sucesso, recebe as info do usuario
+
+    async function fetchUserProfile(uid) {
+        try {
+            const token = await auth.currentUser.getIdToken(); // Pega o token do Firebase
+            const response = await fetch(`http://127.0.0.1:8000/auth/get-user-data/${uid}/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Adiciona o token no header
+                }
+            });
+            if (!response.ok) {
+                console.error("Erro ao buscar perfil:", response.statusText);   
+                return null; // Retorna null se a resposta não for ok
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Erro ao buscar perfil:", error);
+            return null;
+        }
+    }
+
+    // initializeUser é chamada sempre que o estado de autenticação muda
     async function initializeUser(user) {
         if (user) { // se o usuário estiver logado
-            setCurrentUser({ ...user }); // Cria uma cópia rasa (shallow copy) do objeto user do Firebase.
             setUserLoggedIn(true); // atualiza o estado do usuário conectado
-        } else { // se o usuário não estiver logado
-            setCurrentUser(null);
+            const userData = await fetchUserProfile(user.uid); // Chama a função para buscar o perfil do usuário
+            setUserProfile(userData); // Atualiza o estado com os dados do perfil do usuário
+
+        } else { // se o usuário não estiver logado - limpa todos os estados
             setUserLoggedIn(false);
+            setUserProfile(null); 
         }
         setLoading(false); 
     }
 
     // quais dados serão disponibilizados para todos os componentes consumidores do contexto
     const value = {
-        currentUser, 
         userLoggedIn,
-        loading
+        userProfile,
+        loading,
+        refreshUserData: () => initializeUser(auth.currentUser) // permite refreshar os dados do usuário
     }
 
     AuthProvider.propTypes = {
@@ -44,3 +69,4 @@ export function AuthProvider({ children }) {
         </AuthContext.Provider>
     )
 }
+
