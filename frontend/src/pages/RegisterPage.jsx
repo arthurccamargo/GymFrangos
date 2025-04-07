@@ -82,6 +82,12 @@ const RegisterPage = () => {
             handleFirebaseError(error);
         } finally { // independentemente de sucesso ou falha
             setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
+            setFormData({
+                email: '',
+                username: '',
+                password: '',
+                confirmPassword: ''
+            });
         }
     }
 
@@ -234,7 +240,7 @@ const RegisterPage = () => {
                         {/* Botões */}
                         <AuthButton
                             type="submit"
-                            text='Criar Conta'
+                            text={isSigningIn ? 'Registrando...' : 'Criar Conta'}
                             extraClasses="mt-5"
                             disabled={isSigningIn}
                         />
