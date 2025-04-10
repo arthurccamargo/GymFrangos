@@ -10,5 +10,5 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) # Data de criação do perfil
     updated_at = models.DateTimeField(auto_now=True) # Data da última atualização do perfil
 
-def __str__(self):
-    return self.username
+    def __str__(self):
+        return self.username
