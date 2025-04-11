@@ -1,36 +1,21 @@
-import { useNavigate } from "react-router-dom";
-import { doSignInWithGoogle } from '@/firebase/auth';
 import { FcGoogle } from 'react-icons/fc';
+import { useAuth } from "../../hooks/userAuth";
+import { useNavigate } from 'react-router-dom';
 
 const GoogleButton = () => {
   const navigate = useNavigate();
+  const { loginWithGoogle} = useAuth();
+
   const handleLogin = async() => {
+    console.log("\nInicio de handleLogin") // DEBUG
     try {
-      const userCredential = await doSignInWithGoogle()
-      const token = await userCredential.user.getIdToken();
-
-      // username é gerado automaticamente pelo Firebase
-      const response = await fetch('http://127.0.0.1:8000/auth/logingoogle/', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-          
-        if (response.ok) {
-            // Redireciona para dashboard (usuário novo ou existente)
-            navigate('/dashboard');
-        } else {
-            throw new Error(data.error || "Erro no login");
-        }
+      await loginWithGoogle();
+      navigate('/dashboard');
     } catch (error) {
         console.error("Erro:", error);
-        // Mostra feedback de erro (Pode usar toast notification)
-    }
-  };
+        throw new Error(error || "Erro no login");
+      } 
+    };
 
   return (
     <button

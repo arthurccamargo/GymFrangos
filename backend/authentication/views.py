@@ -60,7 +60,7 @@ def check_username(request):
 # VIEWS PROTEGIDAS POR AUTENTICAÇÃO FIREBASE
 # ---------------------------------------------------------------------------------------------
 @api_view(['POST'])
-@permission_classes([AllowAny])  # Permite acesso não autenticado
+@permission_classes([AllowAny])  # Permite acesso não autenticado - sem token
 def handle_social_login(request):
     try:
         # 1. Extrai o token do header Authorization
@@ -95,6 +95,8 @@ def handle_social_login(request):
                 email=email,
                 username=username
             )
+
+            print("Criou o usuario em handle_social_login") # DEBUG
 
             return Response({
                 "status": "success",

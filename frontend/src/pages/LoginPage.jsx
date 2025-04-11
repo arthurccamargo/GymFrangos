@@ -1,50 +1,38 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import AuthButton from '../components/auth/AuthButton';
 import AuthHeader from '../components/auth/AuthHeader';
 import AuthFooter from '../components/auth/AuthFooter';
 import GoogleButton from '@/components/auth/GoogleButton';
-import { doSignInWithEmailAndPassword, doSendEmailVerification } from '../firebase/auth';
+import { useAuth } from "../hooks/userAuth";
+import { useNavigate } from 'react-router-dom'; // Importando o hook useNavigate para redirecionar após login
 
 const LoginPage = () => {
-  const navigate = useNavigate(); // Hook do React Router para navegação entre páginas
-
+  const navigate = useNavigate(); // Hook para redirecionar após login
   const [formData, setFormData] = useState({ // Hook para gerenciar estado do formulario
     email:'',
     password: ''
   });
   const [error, setError] = useState(''); // Hook para estado de mensagens de erro
   const [isSigningIn, setIsSigningIn] = useState(false); // Estado para desativar o botão enquanto autentica
+  const { loginWithEmail } = useAuth(); // Hook para autenticação com email e senha
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Limpa mensagens de erro
     setIsSigningIn(true); // Para desativar o botão de login porque usuário está autenticando
 
-    try {
-      // Chama a função autenticação com email e senha
-      const userCredential = await doSignInWithEmailAndPassword(formData.email, formData.password); 
-      const user = userCredential.user;
-      await user.reload(); // garante que você está verificando o status(dados) mais recente do usuário
+    const result = await loginWithEmail(formData.email, formData.password);
 
-      if (!user.emailVerified) {
-        await doSendEmailVerification(user);
-        setError("Seu e-mail ainda não foi verificado. Um novo e-mail de verificação foi enviado.");
-        return; // Impede o redirecionamento para dashboard
-      }
-
-      navigate('/dashboard'); // Redireciona para a página inicial após login bem-sucedido
-
-    } catch(error) {
-      if (error.code === 'auth/invalid-credential') {
-        setError('E-mail ou senha incorretos. Verifique suas credenciais'); // Mensagem de erro
-      } else { 
-        setError('Erro ao fazer login. Tente novamente.'); // Mensagem de erro
-      }
-    } finally {
-      setIsSigningIn(false); // Reativa o botão de login para poder fazer requisição de autenticação
+    if (result.status === 'email-not-verified') {
+      setError("E-mail não verificado. Um novo e-mail foi enviado.");
+    } else if (result.status === 'error') {
+      setError(result.error.code === 'auth/invalid-credential' 
+        ? 'Credenciais inválidas' 
+        : 'Erro ao fazer login');
+    } else {
+      navigate('/dashboard');
     }
-};
+  };
 
   return (
     <div className='min-h-screen flex flex-col bg-login'>
