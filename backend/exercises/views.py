@@ -3,7 +3,10 @@ from django_filters.rest_framework import DjangoFilterBackend # Permite "filtrag
 from rest_framework.filters import SearchFilter # Habilita "busca textual", permitindo pesquisas parciais
 from .models import Exercise
 from .serializers import ExerciseSerializer
+from authentication.permissions import FirebaseIsAuthenticated
+from rest_framework.decorators import permission_classes # Permite definir permissões para as views
 
+@permission_classes([FirebaseIsAuthenticated]) # Permite acesso apenas a usuários autenticados via Firebase
 class ExerciseListView(generics.ListAPIView): # Permite consultas GET para obter múltiplos registros
     queryset = Exercise.objects.all().order_by('id') # Retorna todos os exercícios cadastrados
     
