@@ -130,8 +130,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'backend.authentication.permissions.FirebaseIsAuthenticated',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', # Paginação
-        'PAGE_SIZE': 20,  # Define quantos exercícios serão retornados por requisição
 }
 
 AUTHENTICATION_BACKENDS = (
