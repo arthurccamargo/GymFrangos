@@ -8,27 +8,54 @@ import {
   DialogTitle,
   DialogClose
 } from "@/components/ui/dialog";
+import useExerciseFilters from '@/hooks/useExerciseFilters';
+import FilterSelect from '@/components/FilterSelect';
+
+// Opções de filtro definidas localmente
+const FILTER_OPTIONS = {
+  bodyParts: [
+    'Peito', 'Costas', 'Pernas',
+    'Ombros', 'Braços', 'Abdômen'
+  ],
+  equipments: [
+    'Barra', 'Halteres', 'Máquina',
+    'Cabo', 'Corpo Livre', 'Kettlebell'
+  ],
+  difficulties: [
+    'beginner', 'intermediate', 'advanced'
+  ]
+};
 
 const ExercisePage = () => {
-  const [searchTerm, setSearchTerm] = useState(''); // Armazena o valor da barra de pesquisa
-  const [selectedBodyPart, setSelectedBodyPart] = useState(''); // Armazena a parte do corpo selecionada no filtro
-  const [selectedExercise, setSelectedExercise] = useState(''); // Armazena o equipamento selecionado no filtro
-  const [selectedDifficulty, setSelectedDifficulty] = useState('');
   const [clickedExercise, setClickedExercise] = useState(null); // Armazena o exercício que foi clicado pelo usuário para abrir o modal de detalhes
-
-
   const [exercises, setExercises] = useState([]); // Armazena a lista de exercícios recebida da API
   const [loading, setLoading] = useState(true); // Estado inicial de carregamento
   const [loadingMore, setLoadingMore] = useState(false); // Indica se mais exercícios estão sendo carregados
   const [error, setError] = useState(null); // Armazena uma mensagem de erro caso a requisição falhe, null == false
   const [nextPage, setNextPage] = useState(null); // URL da próxima página
 
+  const { filters, updateFilter } = useExerciseFilters(); // Importa o hook de filtros de exercícios
+  const { search, body_part, equipment, difficulty } = filters; // Desestrutura os filtros para fácil acesso
+
   // Função para buscar exercícios com paginação
   const fetchExercises = useCallback(async (url, shouldAppend = false) => {
     try {
       // true carrega mais itens ao rolar, false carregamento inicial ou quando aplica filtros
       shouldAppend ? setLoadingMore(true) : setLoading(true);
-      const response = await axios.get(url || 'http://localhost:8000/api/exercises/');
+
+      // Construa a URL com os filtros ativos
+      const params = new URLSearchParams();
+      if (search) params.append('search', search);
+      if (body_part) params.append('body_part', body_part);
+      if (equipment) params.append('equipment', equipment);
+      if (difficulty) params.append('difficulty', difficulty);
+      
+      const requestUrl = url 
+        ? `${url}&${params.toString()}`
+        : `http://localhost:8000/api/exercises/?${params.toString()}`;
+
+
+      const response = await axios.get(requestUrl);
       
       setExercises(prev => shouldAppend 
         ? [...prev, ...(response.data.results || [])] 
@@ -41,18 +68,12 @@ const ExercisePage = () => {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, []);
+  }, [search, body_part, equipment, difficulty]);
 
-  // Efeito para carregar com filtros
+  // Carregar exercícios quando os filtros mudam
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (selectedBodyPart) params.append('body_part', selectedBodyPart);
-    if (selectedExercise) params.append('equipment', selectedExercise);
-    if (selectedDifficulty) params.append('difficulty', selectedDifficulty);
-    if (searchTerm) params.append('search', searchTerm);
-    
-    fetchExercises(`http://localhost:8000/api/exercises/?${params.toString()}`);
-  }, [selectedBodyPart, selectedExercise, selectedDifficulty, searchTerm]);
+    fetchExercises();
+  }, [fetchExercises]);
 
   // Config do IntersectionObserver API do navegador que observa quando elementos entram/saem da viewport
   useEffect(() => {
@@ -77,27 +98,7 @@ const ExercisePage = () => {
     if (lastElement) observer.observe(lastElement);
 
     return () => observer.disconnect(); // Limpeza: desconecta o observer quando o componente desmonta
-  }, [loading, loadingMore, nextPage, fetchExercises]); // Define quando o useEffect deve ser executado novamente
-
-  
-  const bodyParts = [...new Set(exercises.map(ex => ex.body_part))]; // Cria lista únicas de partes do corpo para filtro, Set elimina duplicados
-  const equipmentsUsed = [...new Set(exercises.map(ex => ex.equipment))]; // Cria lista únicas de equipamentos para filtro
-  const difficultyLevel = [...new Set(exercises.map(ex => ex.difficulty))]
-
-  /* Filtra os exercícios com base no que foi digitado na barra de pesquisa e no filtro de partes do corpo */
-  const filteredExercises = exercises.filter(exercise => {
-  /*
-  filter() percorre a lista de exercises e retorna apenas os exercícios que atendem aos critérios de busca e filtro 
-  includes() verifica se o nome do exercício contém o que foi digitado (pode pesquisar "ble" para achar "cable")
-  */
-  const matchesSearch = exercise.name.toLowerCase().includes(searchTerm.toLowerCase()); 
-  // Se nenhuma parte do corpo foi selecionada, então o false vira true e o filtro é ignorado
-  // Se uma parte do corpo foi selecionada, true virou false com o !,logo, verifica se o parte do corpo do exercício de filter é igual ao selecionado
-  const matchesBodyPart = !selectedBodyPart || exercise.body_part === selectedBodyPart;
-  const matchesEquipment = !selectedExercise || exercise.equipment === selectedExercise;
-  const matchesDifficulty = !selectedDifficulty || exercise.difficulty === selectedDifficulty;
-  return matchesSearch && matchesBodyPart && matchesEquipment && matchesDifficulty; // Retorna somente os exercícios que atendem aos 3 critérios
-});
+  }, [loading, loadingMore, nextPage, fetchExercises]); // Define quando o useEffect deve ser executado novamente 
 
   return (
     <div className="container mx-auto p-2 max-w-5xl">
@@ -111,44 +112,30 @@ const ExercisePage = () => {
               type="text"
               placeholder="Pesquisar exercícios..."
               className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} //usuário digita e searchTerm é atualizado
+              value={search}
+              onChange={(e) => updateFilter('search', e.target.value)}
             />
           </div>
 
-          {/* Filtros */}
-          <select
-            className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={selectedBodyPart}
-            onChange={(e) => setSelectedBodyPart(e.target.value)} //usuário escolhe uma parte do corpo e selectedBodyPart é atualizado
-          >
-            <option value="">Corpo</option>
-            {bodyParts.map(part => (
-              <option key={part} value={part}>{part}</option>
-            ))}
-          </select>
-
-          <select
-            className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={selectedExercise}
-            onChange={(e) => setSelectedExercise(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
-          >
-            <option value="">Equipamentos</option>
-            {equipmentsUsed.map(eq => (
-              <option key={eq} value={eq}>{eq}</option>
-            ))}
-          </select>
-
-          <select
-            className="p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            value={selectedDifficulty}
-            onChange={(e) => setSelectedDifficulty(e.target.value)} //usuário escolhe um equipamento e selectedEquipment é atualizado
-          >
-            <option value="">Dificuldade</option>
-            {difficultyLevel.map(eq => (
-              <option key={eq} value={eq}>{eq}</option>
-            ))}
-          </select>
+          {/* Filtros usando o componente FilterSelect */}
+          <FilterSelect
+            value={body_part}
+            options={FILTER_OPTIONS.bodyParts}
+            placeholder="Corpo"
+            onChange={(e) => updateFilter('body_part', e.target.value)}
+          />
+          <FilterSelect
+            value={equipment}
+            options={FILTER_OPTIONS.equipments}
+            placeholder="Equipamentos"
+            onChange={(e) => updateFilter('equipment', e.target.value)}
+          />
+          <FilterSelect
+            value={difficulty}
+            options={FILTER_OPTIONS.difficulties}
+            placeholder="Dificuldade"
+            onChange={(e) => updateFilter('difficulty', e.target.value)}
+          />
         </div>
       </div>
 
@@ -191,7 +178,7 @@ const ExercisePage = () => {
           )}
 
           {/* Se não houver exercícios na lista filtrada, exibe uma mensagem para o usuário */}
-          {filteredExercises.length === 0 && !loadingMore && (
+          {exercises.length === 0 && !loadingMore && (
             <div className="text-center py-8 text-gray-500">
               Nenhum exercício encontrado com os filtros selecionados.
             </div>
