@@ -110,7 +110,7 @@ const ExercisePage = () => {
             <input
               type="text"
               placeholder="Pesquisar exercícios..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-black-500 focus:border-black-500"
               value={search}
               onChange={(e) => updateFilter('search', e.target.value)}
             />
@@ -123,18 +123,21 @@ const ExercisePage = () => {
               options={FILTER_OPTIONS.equipments}
               placeholder="Equipamentos"
               onChange={(e) => updateFilter('equipment', e.target.value)}
+              activeColor="blue"
             />
             <FilterSelect
               value={difficulty}
               options={FILTER_OPTIONS.difficulties}
               placeholder="Dificuldade"
               onChange={(e) => updateFilter('difficulty', e.target.value)}
+              activeColor="red"
             />
             <FilterSelect
               value={body_part}
               options={FILTER_OPTIONS.bodyParts}
               placeholder="Partes Corpo"
               onChange={(e) => updateFilter('body_part', e.target.value)}
+              activeColor="green"
               className='col-span-2 md:col-span-1'
             />
           </div>
@@ -168,9 +171,9 @@ const ExercisePage = () => {
               >
                 <h2 className="text-lg font-semibold">{exercise.name}</h2>
                 <div className="flex items-center text-sm gap-4 mt-2">
-                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
                   <p className="bg-blue-100 text-blue-500 rounded-full px-1">{exercise.equipment}</p>
                   <p className="bg-red-100 text-red-500 rounded-full px-1">{exercise.difficulty}</p>
+                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
                 </div>
               </div>
           ))}
