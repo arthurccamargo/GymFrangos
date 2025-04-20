@@ -100,12 +100,12 @@ const ExercisePage = () => {
   }, [loading, loadingMore, nextPage, fetchExercises]); // Define quando o useEffect deve ser executado novamente 
 
   return (
-    <div className="container mx-auto p-2 max-w-5xl">
+    <div className="w-full px-0 md:container md:mx-auto">
       {/* Barra de Pesquisa e Filtros */}
-      <div className="bg-white rounded-lg shadow-sm p-4 mb-6 sticky top-4 z-10">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-          {/* Search */}
-          <div className="relative col-span-3">
+      <div className="bg-white rounded-lg mb-3 shadow-sm p-3 sticky top-0 z-10">
+        <div className="flex flex-col gap-3">
+          {/* Search */}  
+          <div className="relative w-full"> 
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
@@ -117,24 +117,27 @@ const ExercisePage = () => {
           </div>
 
           {/* Filtros usando o componente FilterSelect */}
-          <FilterSelect
-            value={body_part}
-            options={FILTER_OPTIONS.bodyParts}
-            placeholder="Corpo"
-            onChange={(e) => updateFilter('body_part', e.target.value)}
-          />
-          <FilterSelect
-            value={equipment}
-            options={FILTER_OPTIONS.equipments}
-            placeholder="Equipamentos"
-            onChange={(e) => updateFilter('equipment', e.target.value)}
-          />
-          <FilterSelect
-            value={difficulty}
-            options={FILTER_OPTIONS.difficulties}
-            placeholder="Dificuldade"
-            onChange={(e) => updateFilter('difficulty', e.target.value)}
-          />
+          <div className='grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4'>
+            <FilterSelect
+              value={equipment}
+              options={FILTER_OPTIONS.equipments}
+              placeholder="Equipamentos"
+              onChange={(e) => updateFilter('equipment', e.target.value)}
+            />
+            <FilterSelect
+              value={difficulty}
+              options={FILTER_OPTIONS.difficulties}
+              placeholder="Dificuldade"
+              onChange={(e) => updateFilter('difficulty', e.target.value)}
+            />
+            <FilterSelect
+              value={body_part}
+              options={FILTER_OPTIONS.bodyParts}
+              placeholder="Partes Corpo"
+              onChange={(e) => updateFilter('body_part', e.target.value)}
+              className='col-span-2 md:col-span-1'
+            />
+          </div>
         </div>
       </div>
 
@@ -156,7 +159,7 @@ const ExercisePage = () => {
       */}
       
       {!loading && !error && (
-        <div className="space-y-2">
+        <div className="space-y-2 px-3">
           {exercises.map((exercise, index) => (          
               <div
                 key={`${exercise.id}-${index}`}
@@ -164,7 +167,7 @@ const ExercisePage = () => {
                 className="exercise-item bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               >
                 <h2 className="text-lg font-semibold">{exercise.name}</h2>
-                <div className="flex items-center text-sm gap-4 mt-1">
+                <div className="flex items-center text-sm gap-4 mt-2">
                   <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
                   <p className="bg-blue-100 text-blue-500 rounded-full px-1">{exercise.equipment}</p>
                   <p className="bg-red-100 text-red-500 rounded-full px-1">{exercise.difficulty}</p>

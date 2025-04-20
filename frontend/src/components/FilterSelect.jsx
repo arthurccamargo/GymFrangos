@@ -11,7 +11,7 @@ const FilterSelect = ({
   return (
     <select
       disabled={disabled}
-      className={`p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${className}`}
+      className={`p-2 text-center border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${className}`}
       value={value}
       onChange={onChange}
     >
