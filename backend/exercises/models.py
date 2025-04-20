@@ -14,10 +14,6 @@ class Exercise(models.Model):
     equipment = models.CharField(max_length=100)  # equipamento necessário
     gif_url = models.URLField()
     target = models.CharField(max_length=100)
-    secondaryMuscles = models.CharField(max_length=100)
-    instructions = models.CharField(max_length=300)
-    series = models.IntegerField(default=3)
-    repetitions = models.IntegerField(default=10)
     difficulty = models.CharField(
         max_length=12,  # Tamanho max para as opções
         choices=DIFFICULTY_CHOICES,  

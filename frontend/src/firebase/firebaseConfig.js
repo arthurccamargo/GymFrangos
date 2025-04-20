@@ -1,3 +1,4 @@
+// Usa o Firebase Client SDK para operações do lado do cliente
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";

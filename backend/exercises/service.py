@@ -1,54 +1,122 @@
 import requests
 from decouple import config
 from .models import Exercise
+from backend.firebase.firebase import get_storage_bucket  # Importa a função para obter o bucket do Firebase
+import tempfile
+import os
+from urllib.parse import urlparse
+import time
 
 EXERCISEDB_API_URL = "https://exercisedb.p.rapidapi.com/exercises"
 RAPIDAPI_KEY = config('RAPIDAPI_KEY')
 
-# Cabeçalhos necessários para autenticação na API
 HEADERS = {
     "x-rapidapi-key": RAPIDAPI_KEY, 
     "x-rapidapi-host": "exercisedb.p.rapidapi.com"
 }
 
-def fetch_exercises():
-    """
-    Busca exercícios da API ExerciseDB e armazena no banco de dados
-    A API retorna apenas 10 exercícios por requisição, então usamos um loop
-    para percorrer todas as páginas.
-    """
-    page = 0  # Inicializa a variável da página
-    exercises_saved = 0  # Contador de exercícios salvos
+def download_and_upload_gif(gif_url, exercise_name, bucket):
+    """Baixa o GIF e faz upload para o Firebase Storage, retornando apenas a URL do Storage"""
+    try:
+        # Extrai a extensão do arquivo
+        parsed_url = urlparse(gif_url)
+        file_ext = os.path.splitext(parsed_url.path)[1] or '.gif'
+        
+        # Cria um nome de arquivo seguro
+        safe_name = "".join(c if c.isalnum() else "_" for c in exercise_name)
+        filename = f"exercises/{safe_name}{file_ext}"
+        
+        # Verifica se o arquivo já existe no Storage
+        blob = bucket.blob(filename)
+        if blob.exists():  # Se já existe, retorna a URL diretamente
+            blob.make_public()
+            return blob.public_url
+        
+        # Baixa o GIF
+        response = requests.get(gif_url)
+        response.raise_for_status()
+        
+        # Valida se é realmente um GIF
+        if 'image/gif' not in response.headers.get('content-type', ''):
+            raise ValueError("O arquivo não é um GIF válido")
+        
+        # Faz upload para o Firebase
+        blob.upload_from_string(
+            response.content,
+            content_type='image/gif'
+        )
+        
+        # Retorna a URL pública
+        blob.make_public()
+        return blob.public_url
+    except Exception as e:
+        print(f"Erro ao processar GIF para {exercise_name}: {str(e)}")
+        return None
 
-    while exercises_saved < 100:  # Loop para buscar os 100 primeiras exercicios da API
-        # Faz a requisição GET para a API, passando a página atual e o limite de 10 exercícios por vez
-        response = requests.get(f"{EXERCISEDB_API_URL}?offset={page*10}&limit=10", headers=HEADERS)
-        data = response.json() # converte a resposta JSON para um dicionário Python
-        # Se não houver mais exercícios (a API não retorna mais dados), o loop para
-        if not data:
-            break
-        """
-        Mesmo sem unique=True, a função fetch_exercises() já evita duplicatas porque está usando update_or_create(), que: 
-        1 Procura um exercício com o mesmo name.
-            1.1    Se existe, atualiza os campos.
-            1.2 Se não existe, cria um novo exercício.
-        """
-        for item in data:
-            """ Percorre os exercícios retornados e os insere ou atualiza no banco de dados """
-            Exercise.objects.update_or_create( 
-                name=item['name'],  # Nome do exercício (chave única para evitar duplicatas)
-                defaults={
-                    'body_part': item['bodyPart'],
-                    'equipment': item['equipment'],
-                    'gif_url': item['gifUrl'],
-                    'target' : item['target'],
-                    'secondaryMuscles' : item['secondaryMuscles'],
-                    'instructions' : item['instructions'],
-                }
+def fetch_all_exercises():
+    """Busca TODOS os exercícios da API e armazena no banco de dados"""
+    bucket = get_storage_bucket()
+    page = 0
+    exercises_saved = 0
+    has_more = True
+    failed_exercises = []  # Lista para armazenar falhas
+
+    while has_more:
+        try:
+            response = requests.get(
+                f"{EXERCISEDB_API_URL}?offset={page*10}&limit=10",
+                headers=HEADERS
             )
-            exercises_saved += 1  # incrementa o contador de exercícios salvos
+            
+            if response.status_code == 429:  # Rate limit
+                wait_time = int(response.headers.get('Retry-After', 60))
+                print(f"Rate limit atingido. Esperando {wait_time} segundos...")
+                time.sleep(wait_time)
+                continue
+                
+            response.raise_for_status()
+            data = response.json()
+            
+            if not data:
+                has_more = False
+                break
+            
+            for item in data:
+                # Tenta fazer upload do GIF para o Storage
+                storage_gif_url = download_and_upload_gif(item['gifUrl'], item['name'], bucket)
+                
+                if not storage_gif_url:
+                    print(f"Pulando exercício {item['name']} - falha no upload do GIF")
+                    failed_exercises.append({
+                        'name': item['name'],
+                        'original_gif_url': item['gifUrl'],
+                        'error': 'Falha no upload para Storage'
+                    })
+                    continue  # Não salva exercícios sem GIF no Storage
+                
+                # Salva APENAS se conseguir armazenar o GIF no Storage
+                Exercise.objects.update_or_create(
+                    name=item['name'],
+                    defaults={
+                        'body_part': item['bodyPart'],
+                        'equipment': item['equipment'],
+                        'gif_url': storage_gif_url,  # SEMPRE a URL do Storage
+                        'target': item['target'],
+                    }
+                )
+                exercises_saved += 1
+            
+            page += 1
+            print(f"Exercícios processados: {exercises_saved}")
+            
+        except Exception as e:
+            print(f"Erro durante a importação: {str(e)}")
+            break
 
-        page += 1  # passa para a próxima página de exercícios
+    # Salva relatório de falhas
+    with open('failed_exercises.log', 'w') as f:
+        for exercise in failed_exercises:
+            f.write(f"{exercise['name']} | {exercise['original_gif_url']}\n")
 
-    # Exibe quantos exercícios foram salvos no banco
-    print(f"{exercises_saved} exercícios foram salvos no banco de dados!")
+    print(f"Concluído! {exercises_saved} exercícios salvos.")
+    print(f"{len(failed_exercises)} exercícios falharam (ver 'failed_exercises.log')")
