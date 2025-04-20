@@ -14,12 +14,11 @@ import FilterSelect from '@/components/FilterSelect';
 // Opções de filtro definidas localmente
 const FILTER_OPTIONS = {
   bodyParts: [
-    'Peito', 'Costas', 'Pernas',
-    'Ombros', 'Braços', 'Abdômen'
+    'back', 'cardio', 'chest','lower arms', 'lower legs', 
+    'neck', 'shoulders', 'upper arms', 'upper legs', 'waist',
   ],
   equipments: [
-    'Barra', 'Halteres', 'Máquina',
-    'Cabo', 'Corpo Livre', 'Kettlebell'
+    'assisted' , 'band', 'barbell', 'body weight', 'bosu ball', 'cable, dumbbell', 'elliptical machine', 'ez barbell', 'hammer', 'kettlebell', 'leverage machine', 'medicine ball', 'olympic barbell', 'resistance band', 'roller', 'rope', 'skierg machine', 'sled machine', 'smith machine', 'stability ball', 'stationary bike', 'stepmill machine', 'tire', 'trap bar', 'upper body ergometer', 'weighted', 'wheel roller'
   ],
   difficulties: [
     'beginner', 'intermediate', 'advanced'
@@ -165,7 +164,11 @@ const ExercisePage = () => {
                 className="exercise-item bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               >
                 <h2 className="text-lg font-semibold">{exercise.name}</h2>
-                <p className="text-gray-600 text-sm mt-1">{exercise.body_part}</p>
+                <div className="flex items-center text-sm gap-4 mt-1">
+                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
+                  <p className="bg-blue-100 text-blue-500 rounded-full px-1">{exercise.equipment}</p>
+                  <p className="bg-red-100 text-red-500 rounded-full px-1">{exercise.difficulty}</p>
+                </div>
               </div>
           ))}
 
