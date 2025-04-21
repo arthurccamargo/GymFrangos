@@ -100,9 +100,9 @@ const ExercisePage = () => {
   }, [loading, loadingMore, nextPage, fetchExercises]); // Define quando o useEffect deve ser executado novamente 
 
   return (
-    <div className="w-full px-0 md:container md:mx-auto">
+    <div className="w-full md:container md:mx-auto">
       {/* Barra de Pesquisa e Filtros */}
-      <div className="bg-white rounded-lg mb-3 shadow-sm p-3 sticky top-0 z-10">
+      <div className="bg-white rounded-lg mb-3 shadow-sm p-2 sticky top-0 z-10">
         <div className="flex flex-col gap-3">
           {/* Search */}  
           <div className="relative w-full"> 

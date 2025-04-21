@@ -5,7 +5,7 @@ const Mobilebar = () => {
     const location = useLocation(); // hook para determinar em qual página o usuário está atualmente
     return (
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg rounded-t-2xl border-t border-gray-200">
-          <nav className="px-2 py-2">
+          <nav className="px-2">
             <ul className="flex justify-around items-center">
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path;
