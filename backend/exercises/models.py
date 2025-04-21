@@ -13,6 +13,7 @@ class Exercise(models.Model):
     body_part = models.CharField(max_length=100) # parte do corpo trabalhada
     equipment = models.CharField(max_length=100)  # equipamento necessário
     gif_url = models.URLField()
+    thumbnail_url = models.URLField()
     target = models.CharField(max_length=100)
     difficulty = models.CharField(
         max_length=12,  # Tamanho max para as opções

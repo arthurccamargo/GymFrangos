@@ -163,17 +163,24 @@ const ExercisePage = () => {
       
       {!loading && !error && (
         <div className="space-y-2 px-3">
-          {exercises.map((exercise, index) => (          
+          {exercises.map((exercise, index) => (        
               <div
                 key={`${exercise.id}-${index}`}
                 onClick={() => setClickedExercise(exercise)}
-                className="exercise-item bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                className="exercise-item bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex gap-2"
               >
-                <h2 className="text-lg font-semibold">{exercise.name}</h2>
-                <div className="flex items-center text-sm gap-4 mt-2">
-                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
-                  <p className="bg-blue-100 text-blue-500 rounded-full px-1">{exercise.equipment}</p>
-                  <p className="bg-red-100 text-red-500 rounded-full px-1">{exercise.difficulty}</p>
+                <img
+                  src={exercise.thumbnail_url}
+                  alt={exercise.name}
+                  className="w-16 h-16 object-cover rounded-lg"
+                />
+                <div className="flex flex-col">
+                  <h2 className="text-lg font-semibold ">{exercise.name}</h2>
+                  <div className="flex items-center text-sm gap-2 mt-2">
+                    <p className="bg-green-100 text-green-600 rounded-full px-1 md:px-2 md:py-1">{exercise.body_part}</p>
+                    <p className="bg-blue-100 text-blue-500 rounded-full px-1 md:px-2 md:py-1">{exercise.equipment}</p>
+                    <p className="bg-red-100 text-red-500 rounded-full px-1 md:px-2 md:py-1" >{exercise.difficulty}</p>
+                  </div>
                 </div>
               </div>
           ))}
