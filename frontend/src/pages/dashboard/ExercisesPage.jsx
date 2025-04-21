@@ -135,7 +135,7 @@ const ExercisePage = () => {
             <FilterSelect
               value={body_part}
               options={FILTER_OPTIONS.bodyParts}
-              placeholder="Partes Corpo"
+              placeholder="Parte do Corpo"
               onChange={(e) => updateFilter('body_part', e.target.value)}
               activeColor="green"
               className='col-span-2 md:col-span-1'
@@ -171,9 +171,9 @@ const ExercisePage = () => {
               >
                 <h2 className="text-lg font-semibold">{exercise.name}</h2>
                 <div className="flex items-center text-sm gap-4 mt-2">
+                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
                   <p className="bg-blue-100 text-blue-500 rounded-full px-1">{exercise.equipment}</p>
                   <p className="bg-red-100 text-red-500 rounded-full px-1">{exercise.difficulty}</p>
-                  <p className="bg-green-100 text-green-600 rounded-full px-1">{exercise.body_part}</p>
                 </div>
               </div>
           ))}
@@ -203,41 +203,37 @@ const ExercisePage = () => {
       clickedExercise?.name | operador opcional ? ,impede erros caso clickedExercise seja null
       */}
       <Dialog open={!!clickedExercise} onOpenChange={() => setClickedExercise(null)}>
-        <DialogContent className="sm:max-w-2xl">
+        <DialogContent className="sm:max-w-2xl w-full max-w-[95vw] max-h-[90vh] rounded-xl mx-auto p-4">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">
+            <DialogTitle className="text-3xl font-bold items-center flex justify-center sm:text-2xl ">
               {clickedExercise?.name}
             </DialogTitle>
           </DialogHeader>
           
           {clickedExercise && ( //Se clickedExercise existir, os detalhes são renderizados.
-            <div className="mt-4 space-y-6">
+            <div className="">
               {/* Gift do Exercício */}
               <div className="rounded-lg overflow-hidden">
                 <img
                   src={clickedExercise.gif_url}
                   alt={clickedExercise.name}
-                  className="w-full max-h-[300px] object-contain"
+                  className="w-full max-h-[250px] sm:max-h-[300px] object-contain"
                 />
               </div>
 
               {/* Detalhes do Exercício */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-gray-50 p-4 rounded-lg text-center flex flex-col items-center">
                   <h3 className="font-semibold text-gray-700 mb-1">Parte do Corpo</h3>
                   <p className="text-gray-600">{clickedExercise.body_part}</p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-gray-50 p-4 rounded-lg text-center flex flex-col items-center">
                   <h3 className="font-semibold text-gray-700 mb-1">Equipamento</h3>
                   <p className="text-gray-600">{clickedExercise.equipment}</p>
                 </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-1">Séries</h3>
-                  <p className="text-gray-600">{clickedExercise.series}</p>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-semibold text-gray-700 mb-1">Repetições</h3>
-                  <p className="text-gray-600">{clickedExercise.repetitions}</p>
+                <div className="bg-gray-50 p-4 rounded-lg text-center flex flex-col items-center">
+                  <h3 className="font-semibold text-gray-700 mb-1">Dificuldade</h3>
+                  <p className="text-gray-600">{clickedExercise.difficulty}</p>
                 </div>
               </div>
             </div>
