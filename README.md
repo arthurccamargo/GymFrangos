@@ -2,6 +2,7 @@
 
 A plataforma definitiva para entusiastas de fitness, com **mais de 1000 exercícios** catalogados de forma inteligente e um sistema de autenticação seguro e moderno.
 
+🚧 Este projeto está em desenvolvimento e novas funcionalidades serão adicionadas em breve.
 
 ## 📸 Screenshots
 
